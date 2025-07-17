@@ -1,0 +1,65 @@
+# The Collection Trait
+
+The easiest and most type-safe way to work with Deeb is through the `Collection` trait. This allows you to define your data structures as Rust structs while giving you full access to Deeb’s database operations—without sacrificing compile-time safety.
+
+If you prefer a looser, dynamic approach, check out the [Programmatic Usage Guide](/docs/guide/programtic-usage).
+
+---
+
+### Example
+
+```rust
+#[derive(Collection, Serialize, Deserialize)]
+#[deeb(
+    name = "user",
+    primary_key = "id",
+    associate = ("comment", "id", "user_id", "user_comment")
+)]
+struct User {
+    id: i32,
+    name: String,
+    age: i32,
+}
+```
+
+This defines a `User` collection backed by a JSON file and adds a relationship to a `Comment` collection. With this setup, you can immediately start performing operations like:
+
+```rust
+User::find_one(db, query, transaction)
+User::find_many(db, query, find_options, transaction)
+User::insert(db, document, transaction) // Use `insert_many` in v0.0.12+
+User::insert_many(db, vec![documents], transaction)
+User::update_one(db, query, update_doc, transaction)
+User::update_many(db, query, update_doc, transaction)
+User::delete_one(db, query, transaction)
+User::delete_many(db, query, transaction)
+```
+
+> ⚠️ `insert` has been replaced with `insert_many` in version `v0.0.12`.
+
+> ℹ️ `find_many` accepts an optional `FindManyOptions` struct, allowing you to skip documents, limit results, or sort by fields:
+> 
+> ```rust
+> #[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
+> pub struct FindManyOptions {
+>     pub skip: Option<i32>,
+>     pub limit: Option<i32>,
+>     pub order: Option<Vec<FindManyOrder>>,
+> }
+> ```
+
+---
+
+### Querying Your Data
+
+Deeb includes a flexible query system that allows you to find documents by any field, using nested and compound logic. Learn more about how to construct powerful queries in the [Query Guide](/docs/queries).
+
+---
+
+### Transactions
+
+All operations can be wrapped in transactions, allowing you to commit or roll back changes as a unit. For more info, visit the [Transactions Guide](/docs/guide/transactions).
+
+---
+
+📚 For full API reference and deeper technical details, visit the [Deeb Docs on docs.rs](https://docs.rs/deeb/latest/deeb/).

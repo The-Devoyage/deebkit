@@ -4,7 +4,7 @@ import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 export function CodeBlock({ language, code }) {
   return (
-    <div className="bg-base-100 text-left max-w-full overflow-auto p-4 rounded-lg shadow">
+    <div className="bg-base-200 text-left max-w-full overflow-auto p-4 rounded-lg shadow">
       <SyntaxHighlighter
         language={language}
         style={oneDark}

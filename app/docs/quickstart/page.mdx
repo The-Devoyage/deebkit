@@ -1,0 +1,124 @@
+# Quickstart Guide
+
+Deeb is a lightweight, file-based database designed for Rust applications, offering a 
+straightforward way to manage your data. It supports both schema-driven 
+and schemaless approaches and provides atomic transactions. It's perfect for projects 
+where you need a simple, embedded database without the overhead of a full-fledged database server.
+
+## 🚀 Getting Started
+
+Let's get your Deeb database up and running with a simple "hello-world" project!
+
+1. Create a new project
+
+First, set up a new Rust project and navigate into its directory:
+
+```bash
+cargo new hello-world
+cd hello-world
+```
+
+2. Install Deeb
+
+Add Deeb to your project's dependencies. This command will update your `Cargo.toml` file.
+
+```bash
+cargo add deeb
+```
+
+3. Install dependenices
+
+Deeb leverages Rust's asynchronous capabilities and relies on serde for data serialization and 
+deserialization. Make sure you add these to your project:
+
+```bash
+cargo add tokio --features full
+cargo add serde --features derive
+```
+
+## 📚 Defining Your Data
+
+4. Define an entity
+
+In Deeb, your data structures are represented as entities. These are regular Rust structs 
+that implement Deeb's Collection trait, along with Serde's Serialize and Deserialize traits.
+
+Create a src/main.rs file (or modify your existing one) and add the following:
+
+```rust
+use deeb::*;
+use serde::{Deserialize, Serialize};
+
+
+#[derive(Collection, Serialize, Deserialize)]
+struct Campground {
+    name: String,
+    city: String,
+    campsites: i32,
+    open: bool
+}
+```
+
+## 💾 Interacting with Deeb
+
+5. Create a client
+
+The `Deeb` client is your primary interface for interacting with the 
+database. You'll need to initialize it and add your collections.
+
+Modify your `src/main.rs` main function:
+
+```rust
+#[tokio::main]
+async fn main() -> Result<(), std::io::Error> {
+    let deeb = Deeb::new();
+    deeb.add_instance(
+        "campgrounds",
+        "./campgrounds.json",
+        vec![Campground::entity()],
+    )
+    .await
+    .map_err(|e| Error::new(ErrorKind::Other, e.to_string()))?;
+}
+```
+
+6. Insert some data
+
+Now that your collection is set up, let's add some data!
+
+Add the following code inside your `main` function, after `add_instance`:
+
+```rust
+Campground::insert(
+    &deeb,
+    Campground {
+        name: "Hidden Cove".to_string(),
+        city: "Springville".to_string(),
+        campsites: 22,
+        open: true,
+    },
+    None, // No Transaction
+)
+.await
+.map_err(|e| Error::new(ErrorKind::Other, e.to_string()))?;
+```
+
+7. Find some data
+
+After inserting data, you'll want to retrieve it.
+
+Add this code snippet after your insert operation in main:
+
+```rust
+let campgrounds = Campground::find_many(
+    &deeb,
+    Query::All,
+    None, // No Options
+    None, // No Transaction
+)
+.await
+.map_err(|e| Error::new(ErrorKind::Other, e.to_string()))?;
+
+println!("Found campgrounds: {campgrounds:?}");
+```
+

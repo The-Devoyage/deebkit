@@ -1,0 +1,74 @@
+# Database Setup
+
+Before querying or storing data, you'll need to set up your Deeb database. Here's a quick step-by-step guide.
+
+---
+
+### Create a Database Client
+
+```rust
+use deeb::Deeb;
+
+let db = Deeb::new();
+```
+
+This creates a new Deeb client. Internally, it’s wrapped in `Arc<RwLock<_>>`, making it thread-safe and cloneable—great for sharing across async tasks or threads.
+
+---
+
+### Add Instances (Your JSON Files)
+
+Each instance corresponds to a JSON file on disk. These files hold your entities. If the file doesn’t exist, it’ll be created automatically. However, **the folder must already exist**—Deeb doesn’t currently create directories.
+
+```rust
+db.add_instance(
+    "campgrounds",
+    "./campgrounds.json",
+    vec![], // You'll insert entities here
+).await?;
+```
+
+Each instance is later joined into a unified in-memory database, enabling cross-instance associations.
+
+---
+
+### Create Entities
+
+Entities define the structure of your data. You can create them in two ways:
+
+#### Recommended: Use the [`Collection` Trait](/docs/guide/collection-trait)
+
+```rust
+#[derive(Collection, Serialize, Deserialize)]
+#[deeb(name = "campground", primary_key = "id")]
+struct Campground {
+    id: String,
+    name: String,
+    location: String,
+}
+```
+
+#### 🔧 Manual Option: Use the `Entity` API
+
+```rust
+use deeb::Entity;
+
+let state_park = Entity::new("state_park");
+```
+
+Pass the entity (or collection) into the `vec![]` when adding an instance:
+
+```rust
+db.add_instance("parks", "./parks.json", vec![state_park]).await?;
+```
+
+---
+
+### You're Ready to Query
+
+- If you used the `Collection` trait, you can use high-level methods like `.find_many()` ([Collection Trait Docs](/docs/guide/collection-trait))
+- If you created entities manually, you can query using the lower-level API ([Programmatic Usage Guide](/docs/guide/programtic-usage))
+
+---
+
+📚 For full API reference and deeper technical details, visit the [Deeb Docs on docs.rs](https://docs.rs/deeb/latest/deeb/).

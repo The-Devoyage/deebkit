@@ -1,2 +1,55 @@
-# Hello World
-This is a markdown file that i wrote...
+import { Callout } from 'nextra/components'
+
+# Welcome, Deeber!
+
+Call it **“Deeb,” “D-b,” or “That Cool JSON Thing”**—this lightweight, ACID-compliant database is perfect for small projects, prototypes, and rapid experimentation.
+
+Inspired by the flexibility of MongoDB and the simplicity of SQLite, **Deeb** turns collections of JSON files into a structured, easy-to-query database.
+
+Since Deeb stores data in plain JSON files, you can inspect and edit your data directly with any text editor—no extra tools required.
+ 
+<Callout type="info">Jump right in with a [Quick Start](/docs/quickstart)!</Callout>
+
+👉 Dive into the [documentation](https://docs.rs/deeb/latest/deeb/) or check out the getting started guide to learn more.
+
+---
+
+### 🔒 ACID Compliance  
+Deeb is designed to be ACID compliant—delivering reliable, consistent behavior even with its lightweight JSON foundation.
+
+### 📦 JSON-Based Storage  
+Data is stored in readable and portable `.json` files. This makes it easy to integrate Deeb into any system that uses or produces JSON.
+
+### 🧩 Schemaless by Default  
+No rigid schemas here. Deeb lets you define your data on the fly, but with Rust generics, you can still enforce type safety at compile time.
+
+### 🔄 Transactions  
+Execute multiple operations atomically—either all succeed or none do. Deeb ensures integrity with rollback support.
+
+### 🔍 Flexible Querying  
+Supports simple to complex queries, including nested and compound filters, letting you interact with your data in expressive ways.
+
+---
+
+
+### 🚫 What Deeb Is *Not*
+
+While Deeb is a powerful tool for certain use cases, it's important to know what it’s *not* designed for:
+
+- **Not a Full-Fledged SQL Database**  
+  Deeb doesn’t support SQL syntax, but does support some basic associations! It’s more like a document store than a traditional RDBMS.
+
+- **Not a High-Performance, Scalable Solution**  
+  Deeb is great for local dev, experiments, internal tooling, and small projects—but it’s not built for high-throughput production workloads or massive datasets.
+
+- **Not a Networked Database**  
+  There’s no built-in server, no sockets, no remote access. Deeb reads and writes directly from the local file system. If you want a networked version, check out `deeb-server`, releasing in v0.0.12.
+
+- **Not a Type-Enforced Store at Runtime**  
+  Deeb doesn’t enforce schemas or types at runtime—data is as flexible (or chaotic) as your JSON files. Type safety comes from Rust, not from the database engine itself.
+
+- **Not Designed for Concurrent Writes at Scale**  
+  While Deeb supports transactions and basic locking, it’s not intended for heavy concurrent access patterns typical in multi-user or clustered environments.
+
+If you're building a globally distributed, real-time application with millions of users—Deeb probably isn’t your tool. But for everything from weekend projects to local tooling, it’s fast, lightweight, and super easy to use. Once you are done,
+your data is portable and can be moved to any other system with few restrictions.

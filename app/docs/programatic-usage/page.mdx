@@ -1,0 +1,103 @@
+# Programmatic Usage
+
+Here’s how to use `deeb` **programmatically**—without relying on the trait-based system. This section explains what’s happening under the hood and how to interact with the database directly.
+
+---
+
+## 1. Set Up the Database and Entities
+
+Before you can make any queries, you’ll need to:
+
+* Set up your database instance
+* Define your entities
+
+📖 Refer to:
+
+* [Quickstart](/docs/quickstart)
+* [Create a Database](/docs/create-database)
+
+---
+
+## 2. Use Methods Directly on the Database
+
+Once everything is set up, you can call methods **directly on the `db` instance** using **type generics**.
+
+Here’s an example of how to fetch a single user:
+
+```rust
+let result = db.find_one::<User>(&user_entity, query, None).await?;
+```
+
+Every method available in the trait-based system is also available here — just with **explicit types** passed in.
+
+---
+
+## 🛠 Available Methods
+
+### Find One 
+
+```rust
+let result = db.find_one::<User>(&user_entity, query, transaction).await?;
+```
+
+Finds a single record that matches the query.
+
+---
+
+### Find Many 
+
+```rust
+let results = db.find_many::<User>(&user_entity, query, find_options, transaction).await?;
+```
+
+Finds multiple records with optional pagination or sorting.
+
+---
+
+### Insert
+
+```rust
+let inserted = db.insert_one::<InsertUser>(&user_entity, insert_doc, transaction).await?;
+
+let many = db.insert_many::<InsertUser>(&user_entity, vec![doc1, doc2], transaction).await?;
+```
+
+Insert one or many records into the database.
+
+---
+
+### Update
+
+```rust
+let updated = db.update_one::<User, UpdateUser>(
+    &user_entity,
+    query,
+    update_doc, // UpdateUser 
+    transaction,
+).await?;
+```
+
+Update existing records using a filter and a document. `UpdateUser` defines what fields can be updated.
+
+---
+
+### Delete
+
+```rust
+let deleted = db.delete_many(&user_entity, Query::All, transaction).await?;
+```
+
+Delete matching documents. You can use custom queries like `Query::Eq("field", value)`.
+
+---
+
+## Summary
+
+This approach is ideal when you want:
+
+* Full control over types and behavior
+* To bypass the auto-derived traits
+* A more transparent, flexible API surface
+
+If you're building advanced workflows, migrations, or automation tools — this programmatic approach is your go-to.
+

@@ -11,7 +11,7 @@ export default function HomePage() {
         <h1 className="text-5xl font-bold mb-4">Meet <span className="text-primary">deeb</span></h1>
         <CodeBlock language="rust" code={`let db = Deeb::new();\ndb.insert("users", json!({ "name": "Alice" })).await?;`} />
         <p className="text-lg my-6 max-w-xl">
-          A lightweight, zero-setup embedded JSON database for Rust developers. Perfect for CLIs, prototypes, and internal tools.
+          A lightweight, zero-setup embedded ACID compliant JSON database for Rust developers. Perfect for CLIs, prototypes, and internal tools.
         </p>
         <div className="flex gap-4 mb-6">
           <a className="btn btn-primary" href="https://github.com/The-Devoyage/deeb" target="_blank">GitHub</a>
@@ -56,8 +56,8 @@ export default function HomePage() {
             <p>Use flexible JSON objects—no schemas needed.</p>
           </div>
           <div className="card bg-base-100 p-4 shadow">
-            <h3 className="font-bold">🖥️ CLI + Library</h3>
-            <p>Use from both command-line(coming soon!) and code.</p>
+            <h3 className="font-bold">🖥️ Tooling</h3>
+            <p>Use from code, as a hosted server(soon!), or command-line(soon!).</p>
           </div>
           <div className="card bg-base-100 p-4 shadow">
             <h3 className="font-bold">🌱 Lightweight</h3>
