@@ -36,7 +36,7 @@ Each instance is later joined into a unified in-memory database, enabling cross-
 
 Entities define the structure of your data. You can create them in two ways:
 
-#### Recommended: Use the [`Collection` Trait](/docs/guide/collection-trait)
+#### Recommended: Use the [Collection Trait](/docs/collection-trait)
 
 ```rust
 #[derive(Collection, Serialize, Deserialize)]
@@ -66,8 +66,8 @@ db.add_instance("parks", "./parks.json", vec![state_park]).await?;
 
 ### You're Ready to Query
 
-- If you used the `Collection` trait, you can use high-level methods like `.find_many()` ([Collection Trait Docs](/docs/guide/collection-trait))
-- If you created entities manually, you can query using the lower-level API ([Programmatic Usage Guide](/docs/guide/programtic-usage))
+- If you used the `Collection` trait, you can use high-level methods like `.find_many()` ([Collection Trait Docs](/docs/collection-trait))
+- If you created entities manually, you can query using the lower-level API ([Programmatic Usage Guide](/docs/programmatic-usage))
 
 ---
 

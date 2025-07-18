@@ -1,0 +1,92 @@
+# Querying in Deeb
+
+Deeb provides a flexible and expressive query system for interacting with your data. Queries are used in `find`, `update`, and `delete` operations to filter documents based on custom conditions.
+
+---
+
+## Query Types
+
+| Type       | Description                                                |
+|------------|------------------------------------------------------------|
+| `eq`       | Equal — Matches documents with a field equal to a value.   |
+| `ne`       | Not Equal — Matches documents where the field is not equal.|
+| `like`     | Like — Performs substring or pattern matching.             |
+| `gt`       | Greater Than — Matches documents with a field greater than a value. |
+| `lt`       | Less Than — Matches documents with a field less than a value.   |
+| `gte`      | Greater Than or Equal — Same as above, but inclusive.     |
+| `lte`      | Less Than or Equal — Same as above, but inclusive.        |
+| `and`      | Combines multiple queries; all must match.                 |
+| `or`       | Combines multiple queries; at least one must match.        |
+| `all`      | Matches all documents.                                     |
+| `associated` | Queries across associated entities.                      |
+
+---
+
+## Query Enum Definition
+
+```rust
+#[derive(Debug, Clone, PartialEq, Deserialize, Serialize)]
+pub enum Query {
+    Eq(Key, Value),
+    Ne(Key, Value),
+    Like(Key, String),
+    Lt(Key, Value),
+    Lte(Key, Value),
+    Gt(Key, Value),
+    Gte(Key, Value),
+    And(Vec<Query>),
+    Or(Vec<Query>),
+    Associated(Entity, Box<Query>),
+    All,
+}
+```
+
+You can construct queries either directly using the enum, or through helper functions for ease and clarity.
+
+---
+
+## Examples
+
+### Match All Documents
+```rust
+let query = Query::All;
+let query = Query::all(); // Helper method
+```
+
+### Match by Field
+```rust
+let query = Query::eq("name", "oliver");       // Helper
+let query = Query::Eq("name".into(), json!("oliver")); // Raw
+```
+
+### Compound Conditions
+```rust
+let query = Query::and(vec![
+  Query::eq("name", "John"),
+  Query::eq("age", 30),
+  Query::eq("city", "New York"),
+]);
+
+let query = Query::or(vec![
+  Query::eq("status", "active"),
+  Query::eq("admin", true),
+]);
+```
+
+### Like Conditions
+
+The like operator in Deeb works similarly to SQL’s LIKE '%value%'. It performs a partial 
+match, checking if the target string contains the given substring anywhere in its value.
+
+> Note: You do not include the percentage signs, `%%`.
+
+### Associated Entities
+```rust
+let query = Query::associated(comment, Query::eq("user_id", 1));
+```
+
+---
+
+🧠 Learn more about how to use queries in context in the [Collection Trait Guide](/docs/collection-trait) or explore advanced scenarios in the [Programmatic Usage Guide](/docs/programmatic-usage).
+
+📚 For full API reference, check out the [Deeb docs on docs.rs](https://docs.rs/deeb/latest/deeb/).

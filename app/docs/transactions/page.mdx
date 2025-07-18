@@ -1,0 +1,80 @@
+# Transactions
+
+Transactions let you perform multiple operations in sequence without committing to the database after each one. This allows you to roll back the entire operation chain if one of them fails, ensuring your data stays consistent.
+
+## Starting a Transaction
+
+Use `begin_transaction()` to start a transaction. You can then pass the mutable transaction reference into operations like `insert`.
+
+```rust
+let mut transaction = db.begin_transaction().await;
+```
+
+## Inserting Data Within a Transaction
+
+You can insert multiple items into the database using the transaction. None of these operations will be committed until you explicitly call `commit`.
+
+```rust
+db.insert::<User>(
+    &user_collection,
+    User {
+        name: "Al".to_string(),
+        age: 45.0,
+        id: 255,
+    },
+    Some(&mut transaction),
+).await?;
+
+db.insert::<User>(
+    &user_collection,
+    User {
+        name: "Peg".to_string(),
+        age: 40.0,
+        id: 256,
+    },
+    Some(&mut transaction),
+).await?;
+
+db.insert::<User>(
+    &user_collection,
+    User {
+        name: "Bud".to_string(),
+        age: 18.0,
+        id: 257,
+    },
+    Some(&mut transaction),
+).await?;
+```
+
+## Committing the Transaction
+
+After all operations succeed, commit the transaction:
+
+```rust
+db.commit(&mut transaction).await?;
+```
+
+## Verifying the Inserts
+
+Once committed, you can query for the inserted data using `find_many`:
+
+```rust
+let query = Query::Or(vec![
+    Query::eq("name", "Al"),
+    Query::eq("name", "Peg"),
+    Query::eq("name", "Bud"),
+]);
+
+let result = db.find_many::<User>(&user_collection, query, None, None).await?;
+```
+
+The returned result should contain all users inserted in the transaction.
+
+## Summary
+
+- Start a transaction with `begin_transaction()`.
+- Pass the transaction into operations via `Some(&mut transaction)`.
+- Commit using `commit(&mut transaction)`.
+- If any operation fails, skip `commit` and the transaction will not apply.
+
+This provides a safe way to perform grouped operations with atomicity.

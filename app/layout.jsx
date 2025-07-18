@@ -17,7 +17,12 @@ export const metadata = {
   description: "Lightweight Rust database",
 };
 
-const banner = <Banner storageKey="v0.0.11">Deeb v0.0.11 is released! 🎉</Banner>;
+const banner = (
+  <Banner storageKey="v0.0.11">
+    🎉 <span className="font-bold">Deeb v0.0.11</span> released! Install with Cargo:{" "}
+    <span className="bg-slate-900 px-1 rounded">cargo add deeb</span> 🎉
+  </Banner>
+);
 const navbar = (
   <Navbar
     logo={
@@ -27,14 +32,6 @@ const navbar = (
       </>
     }
     projectLink="https://www.github.com/the-devoyage/deeb"
-    children={
-      <Link
-        href="/docs"
-        className="text-xl !text-slate-800 dark:!text-white dark:hover:!text-slate-300 !no-underline"
-      >
-        Docs
-      </Link>
-    }
   />
 );
 const footer = <Footer>MIT {new Date().getFullYear()} © Deebkit.</Footer>;
