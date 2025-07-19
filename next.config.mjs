@@ -1,12 +1,5 @@
 import nextra from "nextra";
 
-const withNextra = nextra({
-  theme: "nextra-theme-docs",
-  themeConfig: "./theme.config.js",
-});
+const withNextra = nextra({});
 
-export default withNextra({
-  output: "export",
-  basePath: "/deebkit",
-  trailingSlash: true,
-});
+export default withNextra({});

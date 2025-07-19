@@ -41,29 +41,29 @@ export default function HomePage() {
 
       {/* Core Features Section */}
       <section className="py-20 px-6 text-center">
-        <h2 className="text-3xl font-bold mb-10">Why Developers Love deeb</h2>
+        <h2 className="text-3xl font-bold mb-10 text-slate-700 dark:text-white">Why Developers Love deeb</h2>
         <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3">
           <div className="card bg-slate-400 dark:bg-base-100 p-4 shadow">
             <h3 className="font-bold">🦀 Rust-native</h3>
             <p>Built with and for Rust developers.</p>
           </div>
-          <div className="card bg-slate-400 dark:bg-base-100 p-4 shadow">
+          <div className="card bg-slate-400 dark:bg-base-200 p-4 shadow">
             <h3 className="font-bold">⚡ Zero Setup</h3>
             <p>Just point to a file path and start saving.</p>
           </div>
-          <div className="card bg-slate-400 dark:bg-base-100 p-4 shadow">
+          <div className="card bg-slate-400 dark:bg-base-200 p-4 shadow">
             <h3 className="font-bold">📁 JSON Store</h3>
             <p>Use flexible JSON objects—no schemas needed.</p>
           </div>
-          <div className="card bg-slate-400 dark:bg-base-100 p-4 shadow">
+          <div className="card bg-slate-400 dark:bg-base-200 p-4 shadow">
             <h3 className="font-bold">🖥️ Tooling</h3>
             <p>Use from code, as a hosted server(soon!), or command-line(soon!).</p>
           </div>
-          <div className="card bg-slate-400 dark:bg-base-100 p-4 shadow">
+          <div className="card bg-slate-400 dark:bg-base-200 p-4 shadow">
             <h3 className="font-bold">🌱 Lightweight</h3>
             <p>Perfect for microservices, tools, and one-off scripts.</p>
           </div>
-          <div className="card bg-slate-400 dark:bg-base-100 p-4 shadow">
+          <div className="card bg-slate-400 dark:bg-base-200 p-4 shadow">
             <h3 className="font-bold">🔌 Embeddable</h3>
             <p>Drop it into any Rust app with a few lines.</p>
           </div>
