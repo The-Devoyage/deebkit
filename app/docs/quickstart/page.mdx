@@ -73,9 +73,9 @@ Modify your `src/main.rs` main function:
 async fn main() -> Result<(), std::io::Error> {
     let deeb = Deeb::new();
     deeb.add_instance(
-        "campgrounds",
-        "./campgrounds.json",
-        vec![Campground::entity()],
+        "campgrounds", // The name of the instance
+        "./campgrounds.json", // The file to save to
+        vec![Campground::entity()], // A list of entities in the file
     )
     .await
     .map_err(|e| Error::new(ErrorKind::Other, e.to_string()))?;

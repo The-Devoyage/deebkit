@@ -4,14 +4,14 @@ import { StarButton } from "./components/star-button";
 
 export default function HomePage() {
   return (
-    <main className="dark:bg-base-100 text-base-content">
+    <main className="dark:!bg-base-100 text-base-content">
       {/* Hero Section */}
       <section className="min-h-screen flex flex-col items-center justify-center text-center px-6 pb-6">
         <Image src="/logo.png" width={400} height={400} alt="Deeb Logo" />
         <h1 className="text-slate-700 dark:text-white text-5xl font-bold mb-4">Meet <span className="text-primary">deeb</span></h1>
         <CodeBlock language="rust" code={`let db = Deeb::new().add_instance(...)?;\n\ndb.insert(\n    &Entity::new("User"),\n    json!({ "name": "Alice" }), \n    transaction\n).await?;`} />
         <p className="text-lg my-6 max-w-xl">
-          A lightweight, zero-setup embedded ACID compliant JSON database for Rust developers. Perfect for CLIs, prototypes, and internal tools.
+          A lightweight, zero-setup, embedded, ACID compliant JSON database for Rust developers. Perfect for CLIs, prototypes, and internal tools.
         </p>
         <div className="flex gap-4 mb-6">
           <a className="btn btn-primary" href="https://github.com/The-Devoyage/deeb" target="_blank">GitHub</a>
@@ -43,7 +43,7 @@ export default function HomePage() {
       <section className="py-20 px-6 text-center">
         <h2 className="text-3xl font-bold mb-10 text-slate-700 dark:text-white">Why Developers Love deeb</h2>
         <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3">
-          <div className="card bg-slate-400 dark:bg-base-100 p-4 shadow">
+          <div className="card bg-slate-400 dark:bg-base-200 p-4 shadow">
             <h3 className="font-bold">🦀 Rust-native</h3>
             <p>Built with and for Rust developers.</p>
           </div>
@@ -73,12 +73,12 @@ export default function HomePage() {
       {/* Use Case Examples */}
       <section id="get-started" className="py-16 px-6 bg-slate-400 dark:bg-base-200">
         <h2 className="text-3xl font-bold text-center mb-6">How to Use deeb</h2>
-        <div className="grid md:grid-cols-2 gap-6">
-          <div className="card bg-slate-700 p-4 shadow">
+        <div className="flex flex-wrap md:flex-nowrap gap-4">
+          <div className="card bg-slate-700 p-4 shadow w-full md:w-1/2">
             <h3 className="font-bold mb-2">📦 Install</h3>
             <CodeBlock language="bash" code={`cargo add deeb`} />
           </div>
-          <div className="card bg-slate-700 p-4 shadow">
+          <div className="card bg-slate-700 p-4 shadow w-full md:w-1/2">
             <h3 className="font-bold mb-2">🧠 Embedded Rust</h3>
             <CodeBlock language="rust" code={`db.find_many(&Entity::new("User"), Query::All, None).await?;`} />
           </div>
