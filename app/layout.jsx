@@ -3,6 +3,7 @@ import { Head, Banner } from "nextra/components";
 import { getPageMap } from "nextra/page-map";
 import { Space_Mono } from "next/font/google";
 import Image from "next/image";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const font = Space_Mono({
@@ -50,6 +51,7 @@ export default async function RootLayout({ children }) {
           // ... Your additional layout options
         >
           {children}
+          <Analytics />
         </Layout>
       </body>
     </html>
