@@ -14,7 +14,7 @@ export const StarButton = () => {
 
   return (
     <a
-      className="btn btn-primary"
+      className="border-2 border-emerald-400 p-2 rounded hover:bg-emerald-600 cursor-pointer active:bg-emerald-800"
       href="https://github.com/The-Devoyage/deeb"
       target="_blank"
       rel="noopener noreferrer"

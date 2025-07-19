@@ -1,15 +1,4 @@
 @import 'tailwindcss';
-@plugin "daisyui";
+@import 'nextra-theme-docs/style.css';
 
 @variant dark (&:where(.dark *));
-
-/* Optional: import Nextra theme styles */
-@import 'nextra-theme-docs/style.css';
-/* or nextra-theme-blog/style.css */
-
-
-/* .mockup-code::before { */
-/*   content: none !important;  */
-/*   display: none !important; */
-/* } */
-

@@ -48,6 +48,9 @@ export default async function RootLayout({ children }) {
           pageMap={await getPageMap()}
           docsRepositoryBase="https://github.com/The-Devoyage/deebkit/tree/main"
           footer={footer}
+          nextThemes={{
+            attribute: "class",
+          }}
           // ... Your additional layout options
         >
           {children}
