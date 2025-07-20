@@ -4,12 +4,11 @@ import { StarButton } from "./components/star-button";
 
 export default function HomePage() {
   return (
-    <main className="dark:!bg-base-100 text-base-content">
-      {/* Hero Section */}
+    <main>
       <section className="min-h-screen flex flex-col items-center justify-center text-center px-6 pb-6">
         <Image src="/logo.png" width={400} height={400} alt="Deeb Logo" />
-        <h1 className="!text-slate-700 dark:!text-white text-5xl font-bold mb-4">
-          Meet <span className="text-primary">deeb</span>
+        <h1 className="text-black dark:text-slate-400 text-5xl font-bold mb-4">
+          Meet <span className="text-slate-600">deeb</span>
         </h1>
         <CodeBlock
           language="rust"
@@ -33,9 +32,10 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Problem/Solution Section */}
-      <section className="py-16 px-6 bg-slate-400 dark:bg-slate-800 text-center text-slate-200">
-        <h2 className="text-slate-200 text-3xl font-bold mb-4">A database... without the database.</h2>
+      <section className="py-16 px-6 bg-slate-500 dark:bg-slate-900 text-center text-slate-200">
+        <h2 className="text-slate-200 text-3xl font-bold mb-4">
+          A database... without the database.
+        </h2>
         <p className="mb-8">
           Use <span className="font-semibold">deeb</span> when you just need simple local data done
           right.
@@ -57,11 +57,11 @@ export default function HomePage() {
       </section>
 
       {/* Core Features Section */}
-      <section className="py-20 px-6 text-center">
+      <section className="py-20 px-6 text-center bg-white dark:bg-slate-950">
         <h2 className="text-3xl font-bold mb-10 text-slate-700 dark:text-white">
           Why Developers Love deeb
         </h2>
-        <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3">
+        <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3 text-slate-300">
           <div className="rounded-md bg-slate-600 dark:bg-base-200 p-4 shadow">
             <h3 className="font-bold">🦀 Rust-native</h3>
             <p>Built with and for Rust developers.</p>
@@ -90,7 +90,10 @@ export default function HomePage() {
       </section>
 
       {/* Use Case Examples */}
-      <section id="get-started" className="py-16 px-6 bg-slate-400 dark:bg-slate-800">
+      <section
+        id="get-started"
+        className="py-16 px-6 bg-slate-500 dark:bg-slate-900 text-slate-300"
+      >
         <h2 className="text-3xl font-bold text-center mb-6">How to Use deeb</h2>
         <div className="flex flex-wrap md:flex-nowrap gap-4">
           <div className="rounded-md bg-slate-700 p-4 shadow w-full md:w-1/2">
@@ -109,7 +112,9 @@ export default function HomePage() {
 
       {/* Comparison Grid */}
       <section className="py-20 px-6 text-center">
-        <h2 className="text-slate-200 text-3xl font-bold mb-10">How deeb compares</h2>
+        <h2 className="text-slate-500 dark:text-slate-200 text-3xl font-bold mb-10">
+          How deeb compares
+        </h2>
         <div className="overflow-x-auto rounded-lg shadow ring-1 ring-gray-200 dark:ring-gray-700">
           <table className="w-full border-collapse text-sm">
             <thead className="bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200">
@@ -126,7 +131,7 @@ export default function HomePage() {
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white dark:bg-slate-900">
+            <tbody className="bg-white text-slate-500 dark:bg-slate-900">
               <tr>
                 <th className="p-4 text-left font-normal border-b border-gray-200 dark:border-gray-700">
                   Zero Setup
@@ -165,7 +170,7 @@ export default function HomePage() {
       </section>
 
       {/* CTA Footer */}
-      <footer className="py-10 text-center bg-slate-400 dark:bg-slate-700">
+      <footer className="py-10 text-center bg-slate-500 dark:bg-slate-900 text-slate-200">
         <h3 className="text-xl font-bold mb-2">Show some love!</h3>
         <p className="mb-6">Start embedding lightweight databases into your Rust apps today.</p>
         <StarButton />

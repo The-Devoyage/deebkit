@@ -1,4 +1,4 @@
-import { Footer, Layout, Link, Navbar } from "nextra-theme-docs";
+import { Footer, Layout, Navbar } from "nextra-theme-docs";
 import { Head, Banner } from "nextra/components";
 import { getPageMap } from "nextra/page-map";
 import { Space_Mono } from "next/font/google";
@@ -29,18 +29,20 @@ const navbar = (
     logo={
       <>
         <Image src="/logo.png" width={40} height={40} alt="Deeb Logo" />
-        <b className="text-2xl text-slate-900 dark:text-white">Deebkit</b>
+        <b className="text-2xl">Deebkit</b>
       </>
     }
     projectLink="https://www.github.com/the-devoyage/deeb"
   />
 );
-const footer = <Footer>MIT {new Date().getFullYear()} © Deebkit.</Footer>;
+const footer = (
+  <Footer className="bg-white dark:bg-slate-950">MIT {new Date().getFullYear()} © Deebkit.</Footer>
+);
 
 export default async function RootLayout({ children }) {
   return (
     <html lang="en" dir="ltr" suppressHydrationWarning className={font.className}>
-      <Head>{/* Your additional tags should be passed as `children` of `<Head>` element */}</Head>
+      <Head backgroundColor={{ dark: "#020618", light: "#fff" }}></Head>
       <body>
         <Layout
           banner={banner}
@@ -48,10 +50,6 @@ export default async function RootLayout({ children }) {
           pageMap={await getPageMap()}
           docsRepositoryBase="https://github.com/The-Devoyage/deebkit/tree/main"
           footer={footer}
-          nextThemes={{
-            attribute: "class",
-          }}
-          // ... Your additional layout options
         >
           {children}
           <Analytics />
