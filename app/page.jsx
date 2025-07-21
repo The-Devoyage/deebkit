@@ -18,8 +18,8 @@ export default function HomePage() {
           Perfect for CLIs, prototypes, and internal tools.
         </p>
         <div className="flex gap-4 mb-6">
-          <a href="https://github.com/The-Devoyage/deeb" target="_blank">
-            <Button outline>GitHub</Button>
+          <a href="https://discord.gg/79zqTfVpex" target="_blank">
+            <Button outline>Discord</Button>
           </a>
 
           <a href="/docs/quickstart">

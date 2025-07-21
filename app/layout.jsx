@@ -33,6 +33,7 @@ const navbar = (
       </>
     }
     projectLink="https://www.github.com/the-devoyage/deeb"
+    chatLink="https://discord.gg/79zqTfVpex"
   />
 );
 const footer = (
