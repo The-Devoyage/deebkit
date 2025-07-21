@@ -1,6 +1,5 @@
-import { CodeBlock } from "./components/code-block";
 import Image from "next/image";
-import { StarButton } from "./components/star-button";
+import { StarButton, CodeBlock, Button } from "./components";
 
 export default function HomePage() {
   return (
@@ -8,7 +7,7 @@ export default function HomePage() {
       <section className="min-h-screen flex flex-col items-center justify-center text-center px-6 pb-6">
         <Image src="/logo.png" width={400} height={400} alt="Deeb Logo" />
         <h1 className="text-black dark:text-slate-400 text-5xl font-bold mb-4">
-          Meet <span className="text-slate-600">deeb</span>
+          Meet <span className="text-indigo-500">deeb</span>
         </h1>
         <CodeBlock
           language="rust"
@@ -19,15 +18,12 @@ export default function HomePage() {
           Perfect for CLIs, prototypes, and internal tools.
         </p>
         <div className="flex gap-4 mb-6">
-          <a
-            className="btn btn-primary"
-            href="https://github.com/The-Devoyage/deeb"
-            target="_blank"
-          >
-            GitHub
+          <a href="https://github.com/The-Devoyage/deeb" target="_blank">
+            <Button outline>GitHub</Button>
           </a>
-          <a className="btn btn-outline btn-primary" href="#get-started">
-            Get Started
+
+          <a href="/docs/quickstart">
+            <Button>Quick Start</Button>
           </a>
         </div>
       </section>
@@ -108,6 +104,11 @@ export default function HomePage() {
             />
           </div>
         </div>
+        <div className="pt-10 flex items-center justify-center">
+          <a href="/docs/quickstart">
+            <Button>Get Started Now</Button>
+          </a>
+        </div>
       </section>
 
       {/* Comparison Grid */}
@@ -131,7 +132,7 @@ export default function HomePage() {
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white text-slate-500 dark:bg-slate-900">
+            <tbody className="bg-white text-slate-500 dark:bg-slate-900 dark:text-slate-300">
               <tr>
                 <th className="p-4 text-left font-normal border-b border-gray-200 dark:border-gray-700">
                   Zero Setup
