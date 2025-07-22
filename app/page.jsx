@@ -11,7 +11,7 @@ export default function HomePage() {
         </h1>
         <CodeBlock
           language="rust"
-          code={`let db = Deeb::new().add_instance(...)?;\n\ndb.insert(\n    &Entity::new("User"),\n    json!({ "name": "Alice" }), \n    transaction\n).await?;`}
+          code={`use deeb::Deeb;\n\n#[derive(Collection)\nstruct User {...}\n\nlet db = Deeb::new().add_instance(...);\nlet user = User::find_one(db, query, transaction);`}
         />
         <p className="text-lg my-6 max-w-xl">
           A lightweight, zero-setup, embedded, ACID compliant JSON database for Rust developers.

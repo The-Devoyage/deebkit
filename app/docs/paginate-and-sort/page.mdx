@@ -1,0 +1,137 @@
+# Pagination and Sorting
+
+Deeb supports pagination and sorting through the `FindManyOptions` struct, which can be passed to the `find_many` query method. This allows you to:
+
+- Limit the number of results returned
+- Skip over a number of results (useful for paging)
+- Sort results by any field
+
+---
+
+## Limiting Results
+
+Use the `limit` field to control how many results are returned. This is especially useful when paginating through large datasets.
+
+```rust
+let query = Query::eq("age", 0.5);
+
+let options = Some(FindManyOptions {
+    limit: Some(2),
+    skip: None,
+    order: None,
+});
+
+let users = db
+    .find_many::<User>(&user, query, options, None)
+    .await?
+    .unwrap();
+```
+
+This will return **at most 2 users** who match the query.
+
+---
+
+## Skipping Results
+
+Use `skip` to skip over a number of matching documents. This is often used in combination with `limit` for paginated queries.
+
+```rust
+let query = Query::eq("age", 0.5);
+
+let options = Some(FindManyOptions {
+    limit: None,
+    skip: Some(1),
+    order: None,
+});
+
+let users = db
+    .find_many::<User>(&user, query, options, None)
+    .await?
+    .unwrap();
+```
+
+This returns all users who match the query, **except the first one**.
+
+---
+
+## Combining Limit + Skip
+
+Combine `limit` and `skip` to build pages of results:
+
+```rust
+let query = Query::eq("age", 0.5);
+
+let options = Some(FindManyOptions {
+    limit: Some(1),
+    skip: Some(1),
+    order: None,
+});
+
+let users = db
+    .find_many::<User>(&user, query, options, None)
+    .await?
+    .unwrap();
+```
+
+This will return **one user**, skipping the first matching result — perfect for paginating page 2 of 1-per-page results.
+
+---
+
+## Sorting Results
+
+Sort results by any field using the `order` field.
+
+```rust
+let query = Query::eq("age", 0.5);
+
+let options = Some(FindManyOptions {
+    limit: None,
+    skip: None,
+    order: Some(vec![FindManyOrder {
+        property: "name".to_string(),
+        direction: OrderDirection::Ascending,
+    }]),
+});
+
+let users = db
+    .find_many::<User>(&user, query, options, None)
+    .await?
+    .unwrap();
+```
+
+This will sort all users with `age = 0.5` **in ascending order by name**. You can sort in descending order too:
+
+```rust
+direction: OrderDirection::Descending,
+```
+
+You can also pass multiple `FindManyOrder` objects in the array to do multi-field sorts.
+
+---
+
+## Tip
+
+The `FindManyOptions` struct looks like this:
+
+```rust
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
+pub struct FindManyOptions {
+    pub skip: Option<i32>,
+    pub limit: Option<i32>,
+    pub order: Option<Vec<FindManyOrder>>,
+}
+```
+
+And each `FindManyOrder`:
+
+```rust
+pub struct FindManyOrder {
+    pub property: String,
+    pub direction: OrderDirection,
+}
+```
+
+---
+
+For a deeper look at querying, check out the [Query Guide](/docs/queries). Or view the full type definition on [docs.rs](https://docs.rs/deeb/latest/deeb/).
+

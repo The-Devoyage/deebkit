@@ -5,7 +5,8 @@ const meta = {
   ["collection-trait"]: "The Collection Trait",
   ["programmatic-usage"]: "Programmatic Usage",
   ["queries"]: "Queries",
-  ["transactions"]: "Transactions"
+  ["paginate-and-sort"]: "Paginate and Sort",
+  ["transactions"]: "Transactions",
 };
 
 export default meta;
