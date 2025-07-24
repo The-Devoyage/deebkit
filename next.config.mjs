@@ -11,4 +11,8 @@ const withNextra = nextra({
   },
 });
 
-export default withNextra({});
+export default withNextra({
+  images: {
+    domains: ["placehold.co"],
+  },
+});

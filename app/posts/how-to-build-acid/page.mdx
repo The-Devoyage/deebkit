@@ -1,0 +1,245 @@
+---
+title: How to build an ACID Compliant Database
+date: 2025-07-23
+tags: ['JSON database', 'Rust', 'ACID', 'Prototyping']
+description: Explore the core principles of ACID compliance by walking through the architecture of Deeb — a lightweight, JSON-based database built in Rust.
+author: Nick McLean
+---
+
+# How to Build an ACID Compliant Database
+
+Building a database is an opportunity that might not ever come up in your career, but for me, 
+it’s been a truly eye-opening experience. It gave me a peek behind the curtain at what powers 
+modern software and clarified concepts I had only previously used — never really understood.
+
+Today, we’re going to take a look at ACID compliance through the lens of a database I’ve 
+been building called Deeb. It’s a JSON-backed database that uses the principles of 
+ACID to keep data safe, yet easily accessible. It’s written in Rust and built for 
+developers working on small projects, internal tooling, CLIs, or rapid prototyping.
+
+Deeb is designed for creators who value the "home-cooked meal" — a term I 
+recently came across. In contrast to the industry-standard tools (built 
+by and for massive orgs with deep pockets), the home-cooked approach emphasizes 
+simplicity, customization, and joy. You get to craft something that 
+works perfectly for you with your own tools - Similarly to how we cook for ourselves
+in our kitchens every day.
+
+> 🍽️ **Curious about the “home-cooked meal” metaphor?**  
+> Check out [An app can be a home cooked meal](https://www.robinsloan.com/notes/home-cooked-app/?utm_source=changelog-news) by Robin Sloan.
+
+We don’t always need the industrial-scale setups of MongoDB or Postgres to power our hobby 
+apps or tiny services — and we definitely don’t want the headaches of managing auth, 
+hosting, migrations, or opaque query layers. Even SQLite can start to feel like too much when 
+you just want to save some data and get on with your life.
+
+So let’s dig in. I’ll walk through how I approached building ACID support in Deeb, and 
+hopefully show how you can cook your own small-scale, yet powerful database for your next lab project.
+
+## What Is ACID Compliance, Really?
+
+If you’ve ever used a "real" database, you’ve probably seen the acronym ACID floating around. It’s tossed out as a kind of gold standard — the thing that separates hobby projects from "serious" software. But what does it actually mean?
+
+Let’s break it down, real quick:
+
+### Atomicity
+
+All operations in a transaction either complete successfully or nothing happens at all. It's the "all-or-nothing" guarantee. If step 3 fails, steps 1 and 2 get rolled back.
+
+### Consistency
+
+Your database should never end up in an invalid state. If you have rules (like a user must have an ID), they’re always true before and after any transaction.
+
+### Isolation
+
+Multiple transactions can happen concurrently, but they shouldn’t interfere with each other. It should feel like they happened one at a time.
+
+### Durability
+
+Once a transaction is committed, it’s safe — even if the power goes out or your app crashes. It’s locked in.
+
+___Sounds official, right?___
+
+In practice, these guarantees are hard to implement — especially in small, embedded, or file-based databases. That’s why many lightweight databases skip them altogether. But in Deeb, I wanted to try. Not just for correctness, but because:
+
+⚠️ Losing saved work — even in a tiny project — is still a bad time.
+
+So I asked: what does ACID look like when you're not backed by a massive engine, but just humble JSON files and Rust?
+
+That’s what the rest of this article will explore.
+
+## Atomicity: All or Nothing
+
+A transaction allows a user to execute multiple operations in sequence safely. If one of the operations fails, they all fail — the database should revert to its previous state. If they all succeed, then everything is committed. Simple promise, hard guarantee.
+
+### Transaction Rollbacks
+
+To make this happen, Deeb introduces a Transaction object. You append operations to it — reads, inserts, updates, deletes — and then execute them all at once. Think of it like building a to-do list and either completing the entire thing or throwing it away. No partial credit.
+
+Here’s a rough sketch in Rust:
+
+```rust
+let mut txn = db.begin_transaction().await;
+
+// Add operations
+let user = User { id: 1, name: "Joey".into(), age: 10 };
+db.insert_one(&user_entity, user, Some(&mut txn)).await?;
+
+let update = json!({ "$set": { "age": 11 } });
+db.update_one(&user_entity, Query::eq("id", 1), update, Some(&mut txn)).await?;
+
+// Commit it all at once
+db.commit(&mut txn).await?;
+```
+
+Now, let’s say something fails during update_one. In that case, Deeb will automatically roll back everything that was successfully queued before. No state is changed, no files are written. Atomicity ✅
+
+## Consistency: Trusting Your Data
+
+In modern NoSQL databases, consistency often takes a bit of a backseat compared to the other pillars of ACID. That’s largely because schemas — the contracts that guarantee structure — are usually not enforced at runtime. If you’ve ever misspelled a key and only discovered it four queries later, you know what I’m talking about.
+
+But with Deeb, we take a hybrid approach. Consistency becomes an optional, opt-in layer. How? Through the magic of Rust’s type system and a trait-driven API.
+
+We can define a Rust struct and derive the Collection trait on it. This gives us all the goodness of static typing and compile-time guarantees, while still storing the data as human-readable JSON.
+
+This blend of loose JSON with strong Rust types lets you trust your data more, without having to write and manage traditional schema migration files.
+
+Example: Defining a Consistent Entity
+
+```rust
+#[derive(Collection, Serialize, Deserialize)]
+#[deeb(
+    name = "user",
+    primary_key = "_id"
+)]
+struct User {
+    _id: i32,
+    name: String,
+    email: String,
+}
+
+// Insert a new user with confidence in structure:
+User::insert_one(
+    &db,
+    User {
+        _id: 1,
+        name: "Alice".into(),
+        email: "alice@example.com".into(),
+    },
+    None
+).await?;
+```
+
+By modeling your data this way, you get confidence that your app logic and your stored data stay in sync — no drifting field names, no half-baked records, and no guessing.
+
+And if you prefer a more freeform, schema-less setup? Deeb supports that too — you can drop down into manual mode and go full JSON freestyle.
+
+## Isolation: Safe Multi-Threaded Access
+
+When I started thinking about how to handle transactions in Deeb, I quickly realized that "just running stuff in parallel" wasn't going to cut it. Deeb is a simple, in-memory JSON-backed database — no background thread pools, no WALs, no fancy coordination between nodes. So the challenge was: how do we make sure transactions don’t step on each other’s toes?
+
+Simple answer? We don’t let them run at the same time.
+
+Deeb ensures transactions are executed in a serialized fashion using exclusive locks.
+
+💡 Serialization is a fancy way of saying: "one-at-a-time, no funny business."
+
+### Why Locking Matters
+
+Here’s a quick scenario that might cause issues in other systems:
+
+```
+Txn1 > Reads bank balance at $10
+Txn2 > Updates bank balance to $20
+Txn2 > Commits
+Txn1 > "If balance < $15, top-up"
+Txn1 > Commits
+```
+
+In this case, Txn1 made a decision based on stale data. Txn2 changed the value before Txn1 finished. In a proper ACID setup, this shouldn’t be allowed to happen.
+
+### Enter Tokio’s RwLock
+
+Deeb uses tokio::sync::RwLock to coordinate access to its in-memory data. This type of lock has a very specific behavior:
+
+- Multiple readers can read simultaneously ✅
+- Only one writer can write at a time ✅
+- If a writer has the lock, no one else — not even readers — can proceed ❌
+- If a reader has a lock, the writer will wait to aquire the lock until the reader finishes!
+
+> Read about [Tokio's RwLock Docs](https://docs.rs/tokio/latest/tokio/sync/struct.RwLock.html)
+
+This is different from the standard library’s RwLock, which may allow reads to happen while a write is waiting. Tokio’s version is strict — which is perfect for transactional integrity.
+
+This means when a transaction begins, Deeb automatically acquires a write lock:
+
+```rust
+let mut db = self.db.write().await; // Blocks until no one else is reading or writing
+// Execute Reads, Writes, Updates, Deletes
+// Commit and release lock
+```
+
+This ensures:
+
+No other reads or writes happen mid-transaction.
+
+The entire transaction block is executed in isolation.
+
+So even if Txn2 tries to start while Txn1 is running, it’ll have to wait its turn. Transactions are serialized by default.
+
+This is how Deeb achieves atomicity with a few smart primitives and some async discipline. No WALs or disk-level gymnastics required — just clear boundaries and solid Rust tools.
+
+## Durability: When the Power Goes Out
+
+Now that we've locked our transactions down and ensured our data is structured properly, it’s time to talk about durability — the "D" in ACID.
+
+Durability means that once a transaction is committed, it stays committed, even if your laptop dies, the power goes out, or you spill LaCroix all over your keyboard. We want to ensure that the data is safely written to disk and survives crashes or reboots.
+
+### Writing to Disk Isn’t Enough
+
+In many systems, a call to write() just puts data into the OS's page cache — it might be written to disk later, or it might not. If your system crashes before the data is flushed, poof, it’s gone.
+
+Deeb handles this by calling fsync — a low-level system call that flushes all changes to the physical disk. This ensures that once the transaction is committed, the data is safely stored.
+
+file.write_all(serde_json::to_string(&instance.data)?.as_bytes())?;
+file.sync_all()?; // Force the OS to write the data to disk
+
+This works great for small datasets or internal tools where simplicity is key. But there’s a gotcha…
+
+### The Danger of Overwriting Files
+
+If we just overwrite the original JSON file directly, we run into a nasty edge case: what if the write fails halfway through? You end up with a corrupted file, and you’ve lost everything.
+
+To avoid this, Deeb uses a technique called shadow writing. Instead of writing directly to the original file, we write to a temporary file first (e.g., users.json.tmp). Once that write is successful and fsync has been called, we rename the temp file to replace the original. This rename operation is atomic on most operating systems.
+
+```rust
+let tmp_path = original_path.with_extension("json.tmp");
+let mut tmp_file = File::create(&tmp_path)?;
+tmp_file.write_all(data.as_bytes())?;
+tmp_file.sync_all()?;
+fs::rename(tmp_path, original_path)?; // Atomic swap
+```
+
+This gives us the confidence that if Deeb says your transaction was saved, it really was saved.
+
+### Durability without the Complexity
+
+We don’t need a write-ahead log (WAL), a background writer thread, or a fancy journaling filesystem. We just need a temporary file, an fsync, and a safe rename.
+
+Is it simple? Yes. Is it boring? Also yes. But that’s kind of the point.
+
+Deeb aims to give you that warm fuzzy feeling that your data is safe — even if the lights go out.
+
+💡 If your tool doesn’t survive a power outage, it’s not durable. Period.
+
+## Final Thoughts
+
+Alright — so building ACID compliance into a database has a few challenges, but it's doable, and honestly, it's worth it. Even with a toy database like Deeb — where the application might not be facing thousands of daily users — your data still deserves to be safe.
+
+Whether it's a weekend project, an internal CLI tool, or a small business app, your users (even if it's just you!) should be able to trust that when data is written, it stays written, stays valid, and won’t vanish into the void if the power flickers.
+
+ACID gives you that peace of mind.
+
+With just a bit of thoughtful design — some smart locking, safe writes, and consistency checks — even a JSON-based embedded store like Deeb can offer guarantees you’d normally expect from the big players.
+
+Thanks for reading — and happy hacking! 🍲
+

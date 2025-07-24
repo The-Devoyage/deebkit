@@ -5,6 +5,7 @@ import { Space_Mono } from "next/font/google";
 import Image from "next/image";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
+import { ThemeSwitch } from "nextra-theme-blog";
 
 const font = Space_Mono({
   subsets: ["latin"],
@@ -34,10 +35,15 @@ const navbar = (
     }
     projectLink="https://www.github.com/the-devoyage/deeb"
     chatLink="https://discord.gg/79zqTfVpex"
+    children={<ThemeSwitch />}
   />
 );
 const footer = (
-  <Footer className="bg-white dark:bg-slate-950">MIT {new Date().getFullYear()} © Deebkit.</Footer>
+  <>
+    <footer className="flex justify-center items-center bg-white dark:bg-slate-950 p-6">
+      MIT {new Date().getFullYear()} © Deebkit.
+    </footer>
+  </>
 );
 
 export default async function RootLayout({ children }) {

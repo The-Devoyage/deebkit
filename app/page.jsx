@@ -9,10 +9,12 @@ export default function HomePage() {
         <h1 className="text-black dark:text-slate-400 text-5xl font-bold mb-4">
           Meet <span className="text-indigo-500">deeb</span>
         </h1>
-        <CodeBlock
-          language="rust"
-          code={`use deeb::Deeb;\n\n#[derive(Collection)\nstruct User {...}\n\nlet db = Deeb::new().add_instance(...);\nlet user = User::find_one(db, query, transaction);`}
-        />
+        <div className="flex items-center justify-center p-4 w-full">
+          <CodeBlock
+            language="rust"
+            code={`use deeb::Deeb;\n\n#[derive(Collection)\nstruct User {...}\n\nlet db = Deeb::new().add_instance(...);\nlet user = User::find_one(db, query, transaction);`}
+          />
+        </div>
         <p className="text-lg my-6 max-w-xl">
           A lightweight, zero-setup, embedded, ACID compliant JSON database for Rust developers.
           Perfect for CLIs, prototypes, and internal tools.
@@ -26,6 +28,7 @@ export default function HomePage() {
             <Button>Quick Start</Button>
           </a>
         </div>
+        <StarButton />
       </section>
 
       <section className="py-16 px-6 bg-slate-500 dark:bg-slate-900 text-center text-slate-200">
@@ -171,7 +174,7 @@ export default function HomePage() {
       </section>
 
       {/* CTA Footer */}
-      <footer className="py-10 text-center bg-slate-500 dark:bg-slate-900 text-slate-200">
+      <footer className="py-10 text-center bg-slate-500 dark:bg-slate-900 text-slate-200 px-4">
         <h3 className="text-xl font-bold mb-2">Show some love!</h3>
         <p className="mb-6">Start embedding lightweight databases into your Rust apps today.</p>
         <StarButton />
