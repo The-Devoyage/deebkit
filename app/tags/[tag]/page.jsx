@@ -14,7 +14,7 @@ export async function generateStaticParams() {
 
 export default async function TagPage({ params }) {
   const tag = decodeURIComponent(params.tag);
-  const title = `Posts Tagged with “${tag}”`;
+  // const title = `Posts Tagged with “${tag}”`;
   const posts = await getPosts();
   const filteredPosts = posts.filter((post) => post.frontMatter.tags?.includes(tag));
 
