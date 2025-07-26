@@ -5,7 +5,10 @@ tags: ['JSON database', 'Rust', 'ACID', 'Prototyping']
 description: Explore the core principles of ACID compliance by walking through the architecture of Deeb — a lightweight, JSON-based database built in Rust.
 author: Nick McLean
 image: /blog/how-to-build-acid.png
+sidebar: false
 ---
+
+import { Callout } from "nextra/components";
 
 # How to Build an ACID Compliant Database
 
@@ -38,7 +41,7 @@ you just want to save some data and get on with your life.
 So let’s dig in. I’ll walk through how I approached building ACID support in Deeb, and 
 hopefully show how you can cook your own small-scale, yet powerful database for your next lab project.
 
-## What Is ACID Compliance, Really?
+## What is ACID Compliance, Really?
 
 If you’ve ever used a "real" database, you’ve probably seen the acronym ACID floating around. It’s tossed out as a kind of gold standard — the thing that separates hobby projects from "serious" software. But what does it actually mean?
 
@@ -245,4 +248,6 @@ ACID gives you that peace of mind.
 With just a bit of thoughtful design — some smart locking, safe writes, and consistency checks — even a JSON-based embedded store like Deeb can offer guarantees you’d normally expect from the big players.
 
 Thanks for reading — and happy hacking! 🍲
+
+<Callout type="info">Check out the [Deeb Quick Start](/docs/quickstart) to set up your own ACID Compliant DB for your next project!</Callout>
 
