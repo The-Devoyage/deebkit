@@ -20,7 +20,7 @@ export const metadata = {
 
 const banner = (
   <Banner storageKey="v0.0.11">
-    🎉 <span className="font-bold">Deeb v0.0.11</span> released! Install with Cargo:{" "}
+    🎉 <span className="font-bold">Deeb v0.0.12</span> released! Install with Cargo:{" "}
     <span className="bg-slate-900 px-1 rounded">cargo add deeb</span> 🎉
   </Banner>
 );
