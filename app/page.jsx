@@ -4,31 +4,38 @@ import { StarButton, CodeBlock, Button } from "./components";
 export default function HomePage() {
   return (
     <main>
-      <section className="min-h-screen flex flex-col items-center justify-center text-center px-6 pb-6">
-        <Image src="/logo.png" width={400} height={400} alt="Deeb Logo" />
-        <h1 className="text-black dark:text-slate-400 text-5xl font-bold mb-4">
-          Meet <span className="text-indigo-500">deeb</span>
-        </h1>
-        <div className="flex items-center justify-center p-4 w-full">
-          <CodeBlock
-            language="rust"
-            code={`use deeb::Deeb;\n\n#[derive(Collection)\nstruct User {...}\n\nlet db = Deeb::new().add_instance(...);\nlet user = User::find_one(db, query, transaction);`}
-          />
+      <section className="relative min-h-screen px-6 pb-6 overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <div className="h-full w-full background-cta opacity-5 dark:opacity-30" />
+          <div className="absolute inset-0 bg-white dark:bg-black opacity-60 pointer-events-none [mask-image:radial-gradient(circle, white 30%, transparent 100%)]" />
         </div>
-        <p className="text-lg my-6 max-w-xl">
-          A lightweight, zero-setup, embedded, ACID compliant JSON database for Rust developers.
-          Perfect for CLIs, prototypes, and internal tools.
-        </p>
-        <div className="flex gap-4 mb-6">
-          <a href="https://discord.gg/79zqTfVpex" target="_blank">
-            <Button outline>Discord</Button>
-          </a>
 
-          <a href="/docs/quickstart">
-            <Button>Quick Start</Button>
-          </a>
+        {/* Foreground content */}
+        <div className="relative z-20 flex flex-col items-center justify-center text-center w-full h-full min-h-screen">
+          <Image src="/logo.png" width={400} height={400} alt="Deeb Logo" />
+          <h1 className="text-black dark:text-slate-400 text-5xl font-bold mb-4">
+            Meet <span className="text-indigo-500">deeb</span>
+          </h1>
+          <div className="flex items-center justify-center p-4 w-full">
+            <CodeBlock
+              language="rust"
+              code={`use deeb::Deeb;\n\n#[derive(Collection)\nstruct User {...}\n\nlet db = Deeb::new().add_instance(...);\nlet user = User::find_one(db, query, transaction);`}
+            />
+          </div>
+          <p className="text-lg my-6 max-w-xl">
+            A lightweight, zero-setup, embedded, ACID compliant JSON database for Rust developers.
+            Perfect for CLIs, prototypes, and internal tools.
+          </p>
+          <div className="flex gap-4 mb-6">
+            <a href="https://discord.gg/79zqTfVpex" target="_blank">
+              <Button outline>Discord</Button>
+            </a>
+            <a href="/docs/quickstart">
+              <Button>Quick Start</Button>
+            </a>
+          </div>
+          <StarButton />
         </div>
-        <StarButton />
       </section>
 
       <section className="py-16 px-6 bg-slate-500 dark:bg-slate-900 text-center text-slate-200">

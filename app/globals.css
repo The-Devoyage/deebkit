@@ -2,3 +2,8 @@
 @import 'nextra-theme-docs/style.css';
 
 @variant dark (&:where(.dark *));
+
+.background-cta {
+  background-image: url("data:image/svg+xml,<svg id='patternId' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'><defs><pattern id='a' patternUnits='userSpaceOnUse' width='25' height='25' patternTransform='scale(7) rotate(55)'><rect x='0' y='0' width='100%' height='100%' fill='%2370ffea00'/><path d='M9.19 0v3.93A9.187 9.187 0 003.93 9.19H0m0 6.618h3.93a9.188 9.188 0 005.26 5.26V25m6.619 0v-3.93a9.188 9.188 0 005.261-5.261H25m0-6.618h-3.93A9.188 9.188 0 0015.81 3.93V0'  stroke-linejoin='round' stroke-linecap='round' stroke-width='3' stroke='%230a1442ff' fill='none'/></pattern></defs><rect width='800%' height='800%' transform='translate(-266,-175)' fill='url(%23a)'/></svg>")
+}
+

@@ -15,7 +15,7 @@ let mut transaction = db.begin_transaction().await;
 You can insert multiple items into the database using the transaction. None of these operations will be committed until you explicitly call `commit`.
 
 ```rust
-db.insert::<User>(
+db.insert_one::<User>(
     &user_collection,
     User {
         name: "Al".to_string(),
@@ -25,7 +25,7 @@ db.insert::<User>(
     Some(&mut transaction),
 ).await?;
 
-db.insert::<User>(
+db.insert_one::<User>(
     &user_collection,
     User {
         name: "Peg".to_string(),
@@ -35,7 +35,7 @@ db.insert::<User>(
     Some(&mut transaction),
 ).await?;
 
-db.insert::<User>(
+db.insert_one::<User>(
     &user_collection,
     User {
         name: "Bud".to_string(),

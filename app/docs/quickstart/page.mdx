@@ -89,7 +89,7 @@ Now that your collection is set up, let's add some data!
 Add the following code inside your `main` function, after `add_instance`:
 
 ```rust
-Campground::insert(
+Campground::insert_one(
     &deeb,
     Campground {
         name: "Hidden Cove".to_string(),

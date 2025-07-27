@@ -27,7 +27,7 @@ This defines a `User` collection backed by a JSON file and adds a relationship t
 ```rust
 User::find_one(db, query, transaction)
 User::find_many(db, query, find_options, transaction)
-User::insert(db, document, transaction) // Use `insert_many` in v0.0.12+
+User::insert_one(db, document, transaction) // Use `insert_many` in v0.0.12+
 User::insert_many(db, vec![documents], transaction)
 User::update_one(db, query, update_doc, transaction)
 User::update_many(db, query, update_doc, transaction)
@@ -35,7 +35,7 @@ User::delete_one(db, query, transaction)
 User::delete_many(db, query, transaction)
 ```
 
-> ⚠️ `insert` has been replaced with `insert_many` in version `v0.0.12`.
+> ⚠️ `insert` has been replaced with `insert_one` in version `v0.0.12`.
 
 > ℹ️ `find_many` accepts an optional `FindManyOptions` struct, allowing you to skip documents, limit results, or sort by fields:
 > 
