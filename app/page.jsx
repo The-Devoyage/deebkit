@@ -11,7 +11,7 @@ export default function HomePage() {
         </div>
 
         {/* Foreground content */}
-        <div className="relative z-20 flex flex-col items-center justify-center text-center w-full h-full min-h-screen">
+        <div className="relative z-10 flex flex-col items-center justify-center text-center w-full h-full min-h-screen">
           <Image src="/logo.png" width={400} height={400} alt="Deeb Logo" />
           <h1 className="text-black dark:text-slate-400 text-5xl font-bold mb-4">
             Meet <span className="text-indigo-500">deeb</span>
