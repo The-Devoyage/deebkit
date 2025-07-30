@@ -1,0 +1,133 @@
+import { Callout } from "nextra/components"; 
+
+# Associations and Enrichments in Deeb
+
+Deeb supports associations (also known as joins or eager loading) in an opinionated but straightforward way—perfect for small projects or lightweight tooling.
+
+Associations let you query one entity based on the properties of another, making it easier to connect related data without complicated setup.
+
+## Key Concepts
+
+You can search one entity using the fields of a related (associated) entity.
+
+**Foreign Keys Define Relationships** - Associations require you to define which fields "link" the two entities together.
+
+**Automatic Enrichment** - When eager loading, Deeb automatically enriches the associated data for you.
+
+### Defining Associations (Using Attributes)
+
+You can define associations directly in your struct using the `#[deeb(...)]` attribute:
+
+```rust
+#[derive(Collection, Serialize, Deserialize, Debug)]
+struct StatePark {
+    name: String,
+}
+
+#[derive(Collection, Serialize, Deserialize, Debug)]
+#[deeb(
+    name = "campground",
+    primary_key = "_id",
+    associate = ("statepark", "state_park_id", "_id", "statepark") // (entity, from, to, alias)
+)]
+struct Campground {
+    name: String,
+    city: String,
+    campsites: i32,
+    open: bool,
+    state_park_id: Option<String>,
+    // This will be enriched automatically by the name of the entity or alias if provided.
+    statepark: Option<Vec<StatePark>>, 
+}
+```
+
+This says: A Campground is associated with a StatePark where `state_park_id = statepark._id`. The result will be attached or "enriched" as statepark.
+
+### Defining Associations Programmatically
+
+If you’re not using the macro, you can associate entities like this:
+
+```rust
+let campground = Entity::new("campground")
+    // Entity name, from column, to column, and alias
+    .associate("statepark", "state_park_id", "_id", None); 
+```
+
+## Querying Associated Data
+
+### With the Programmatic API
+
+```rust
+use serde_json::Value;
+
+let query = Query::associated(campground, Query::eq("statepark.name", "Oak Park"));
+
+let campgrounds = deeb
+    .find_many::<Value>(&Campground::entity(), query, None, None)
+    .await
+    .expect("Failed to find campgrounds...");
+```
+
+This returns rich data including the associated state park:
+
+```json
+{
+  "name": "Hidden Cove",
+  "city": "Springville",
+  "state_park_id": "01K1B3XTT8GQH31N3FDKXPZX5M",
+  "statepark": {
+    "_id": "01K1B3XTT8GQH31N3FDKXPZX5M",
+    "name": "dallas park"
+  }
+}
+```
+
+### With the Collection Trait
+
+You can construct the same query with the collection trait.
+
+```rust
+let query = Query::associated(
+    StatePark::entity(),
+    Query::eq("statepark._id", "01K1B3XTT8GQH31N3FDKXPZX5M"),
+);
+
+let campgrounds = Campground::find_many(&deeb, query, None, None)
+    .await
+    .expect("Failed to find campgrounds");
+```
+
+## Enrichment and Deserialization
+
+### Using `serde_json::Value`
+
+In the programatic example above, we use `serde_json::Value` to allow a free deserialization. Enriched data will be added without failure as long as it is valid JSON.
+
+### Using custom structs or the `Collection` trait
+
+If you are using the `Collection` trait or generics to provide a type safe deserialization, the struct must contain the valid key for the enriched data.
+
+The type should be wrapped in an `Option<Vec<T>>` to correctly be enriched.
+
+<Callout>
+Note: Deeb currently joins all data as a 1:many relation, hence the `Option<Vec<T>>`.
+Plans for other relationship models will be implemented in future releases.
+</Callout>
+
+```rust
+#[derive(Collection, Serialize, Deserialize, Debug)]
+#[deeb(
+    name = "campground",
+    primary_key = "_id",
+    associate = ("statepark", "state_park_id", "_id", "statepark") // (entity, from, to, alias)
+)]
+struct Campground {
+    name: String,
+    city: String,
+    campsites: i32,
+    open: bool,
+    state_park_id: Option<String>,
+    // Note the type as Option<Vec<T>>
+    statepark: Option<Vec<StatePark>>, 
+}
+```
