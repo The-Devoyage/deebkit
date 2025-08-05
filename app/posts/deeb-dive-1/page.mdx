@@ -1,0 +1,104 @@
+---
+title: Deeb Dive - Issue 1
+date: 2025-08-05
+tags: ['Deeb Dive']
+author: Nick McLean
+description: Deep dives for indie devs. Packages, libraries, tools, and more. 
+image: /blog/how-to-build-acid.png
+---
+
+import { Callout } from "nextra/components"
+import { EmailSignupForm } from '../../components'
+
+# Deeb Dive – Issue #1  
+
+*Quick picks for indie devs.*
+
+👋 **Hello World** – and welcome to the very first issue of *Deeb Dive*!  
+
+This is your weekly dispatch exploring personal dev projects, indie tools, weird libraries, and the creative chaos behind building something just for yourself — or your dream that might scale to millions.
+
+Let’s dive in. 🌊
+
+---
+
+<EmailSignupForm />
+
+## Tool of the Week: Fira Code
+
+> 🔗 https://github.com/tonsky/FiraCode
+
+Fira Code is a free, monospaced font designed specifically for developers. What sets it apart? It supports programming ligatures—those fancy combined symbols like `=>`, `!=`, and `===` that render as clean, beautiful glyphs.
+
+![Fira Code Example](https://raw.githubusercontent.com/tonsky/FiraCode/7c5fc86cfe1e4d17778ed7100fb6bd108dc5236f/extras/logo.svg)
+
+But Fira Code isn’t just about looking cool. It’s about improving readability, reducing cognitive load, and making it just a little easier to parse complex logic at a glance.
+
+It works out of the box in most modern editors (VS Code, JetBrains IDEs, Vim, etc.), and it’s actively maintained with thoughtful defaults and performance in mind.
+
+### What You Can Use It For
+
+- Making your code more readable and easier on the eyes
+- Spotting logic patterns faster with ligatures like `=>`, `<=`, `===`, `!=`, and more
+- Developer tools and IDEs that need clear, readable code
+- Terminal apps and CLIs with complex command outputs
+- Code editors for teaching, tutorials, or live coding demos
+- Documentation sites and technical blogs showcasing code snippets
+
+## Package Spotlight  – **Sidequest.js**
+
+> 🔗 [https://docs.sidequestjs.com/](https://docs.sidequestjs.com/)
+
+Sidequest.js is a tiny JavaScript library that makes background tasks feel first-class. You can queue up “side quests” to run in parallel to your app’s main logic—think retries, webhooks, cron-like jobs, and API calls—without diving into full-blown infra.
+
+### 🛠 What You Can Build With It
+
+- **Webhook delivery with retries:** Trigger webhooks after user actions and let Sidequest handle delivery + exponential backoff.
+- **Fire-and-forget API calls:** Kick off tasks like sending emails or updating third-party services without blocking the main request.
+- **Scheduled jobs without cron:** Queue background tasks to run after a delay or at intervals—right from your app code.
+- **Internal automations:** Use it for bots, monitoring, or back-office logic that needs async tasks without new infra.
+
+## Built with Deeb – Flowlet
+
+<Callout type="info">
+It’s a Deeb blog — let’s talk Deeb for a sec!
+Showcasing real projects built with [Deeb](/), a database for small apps and creators. Got something cool? [Share it](mailto:nickmclean@thedevoyage.com) with us!
+</Callout>
+
+
+> 🔗 https://github.com/The-Devoyage/flowlet
+
+A sleek CLI tool to save, run, and sync your most-used shell commands and variables — all backed by Deeb.
+
+Flowlet helps developers reduce friction by organizing repeat tasks into named commands, injecting variables, and syncing workflows between local and cloud environments.
+
+### What It Does
+
+- Save & run shell commands with variable injection
+- Sync your commands to the cloud
+- Extract vars from command output
+- Group commands by project
+- Push/pull commands to/from a Deeb server
+
+If you’re juggling APIs, cloud scripts, or recurring setups, Flowlet keeps your terminal life tidy — and fast.
+
+## Dive Deeper
+
+> 🔗 [How to Build an ACID Compliant Database](/posts/how-to-build-acid)
+
+This week, explore the inner workings of building an ACID-compliant database from scratch with Deeb. Learn how simple JSON files, Rust’s type safety, and clever transaction handling can create a reliable local database without all the usual complexity.
+
+Perfect if you want to understand what really happens behind the scenes when data integrity matters — especially for personal or small-scale apps.
+
+## One Last Thing
+
+If you liked this issue, forward it to a friend who’s hacking on their own stack.
+
+And if you’re building something weird or wonderful — [submit it here](mailto:nickmclean@thedevoyage.com) to get featured.
+
+Thanks for diving deep,  
+— Nick
+
+---
+
+<EmailSignupForm />

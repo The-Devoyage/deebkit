@@ -1,5 +1,6 @@
 import Image from "next/image";
-import { StarButton, CodeBlock, Button } from "./components";
+import { StarButton, CodeBlock, Button, EmailSignupForm } from "./components";
+import { Callout } from "nextra/components";
 
 export default function HomePage() {
   return (
@@ -19,7 +20,7 @@ export default function HomePage() {
           <div className="flex items-center justify-center p-4 w-full">
             <CodeBlock
               language="rust"
-              code={`use deeb::Deeb;\n\n#[derive(Collection)\nstruct User {...}\n\nlet db = Deeb::new().add_instance(...);\nlet user = User::find_one(db, query, transaction);`}
+              code={`use deeb::Deeb;\n\n#[derive(Collection)\nstruct User { name: String, ... }\n\nlet db = Deeb::new().add_instance(...);\nlet user = User::find_one(db, query, transaction);`}
             />
           </div>
           <p className="text-lg my-6 max-w-xl">
@@ -38,35 +39,74 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="py-16 px-6 bg-slate-500 dark:bg-slate-900 text-center text-slate-200">
-        <h2 className="text-slate-200 text-3xl font-bold mb-4">
-          A database... without the database.
-        </h2>
-        <p className="mb-8">
-          Use <span className="font-semibold">deeb</span> when you just need simple local data done
-          right.
+      <section className="py-20 px-6 bg-slate-900 text-slate-100 text-center space-y-8">
+        <h2 className="text-4xl font-bold tracking-tight">A database — without the database.</h2>
+        <p className="text-lg text-slate-400 max-w-xl mx-auto">
+          <span className="font-semibold text-white">deeb</span> is your zero-config local data
+          layer. Fast. Frictionless. JSON-native.
         </p>
-        <div className="grid gap-6 md:grid-cols-3">
-          <div className="rounded-md bg-slate-600 dark:bg-base-100 shadow-md p-4">
-            <h3 className="font-bold mb-2">Simple Setup</h3>
-            <p>Forget configuring Postgres or Mongo. Just import and go.</p>
+
+        <div className="grid gap-6 md:grid-cols-3 max-w-6xl mx-auto">
+          <div className="rounded-2xl bg-slate-800 p-6 shadow-sm border border-slate-700 text-left">
+            <h3 className="text-xl font-semibold mb-2">⚡ Instant Setup</h3>
+            <p className="text-slate-400">
+              No Postgres. No config. Just import and start saving data.
+            </p>
           </div>
-          <div className="rounded-md bg-slate-600 dark:bg-base-100 shadow-md p-4">
-            <h3 className="font-bold mb-2">JSON ORM</h3>
-            <p>Work directly with JSON data—no schema migrations needed.</p>
+
+          <div className="rounded-2xl bg-slate-800 p-6 shadow-sm border border-slate-700 text-left">
+            <h3 className="text-xl font-semibold mb-2">🧬 JSON-Native</h3>
+            <p className="text-slate-400">
+              Use your data as JSON, skip the migrations, and keep full control.
+            </p>
           </div>
-          <div className="rounded-md bg-slate-600 dark:bg-base-100 shadow-md p-4">
-            <h3 className="font-bold mb-2">Embeddable</h3>
-            <p>Use deeb inside CLI tools, servers, or local apps effortlessly.</p>
+
+          <div className="rounded-2xl bg-slate-800 p-6 shadow-sm border border-slate-700 text-left">
+            <h3 className="text-xl font-semibold mb-2">📦 Fully Embeddable</h3>
+            <p className="text-slate-400">
+              Drop it into CLIs, servers, or apps — wherever your project lives.
+            </p>
           </div>
         </div>
       </section>
 
-      {/* Core Features Section */}
-      <section className="py-20 px-6 text-center bg-white dark:bg-slate-950">
-        <h2 className="text-3xl font-bold mb-10 text-slate-700 dark:text-white">
-          Why Developers Love deeb
+      {/* Email Signup */}
+      <section className="relative py-20 px-6 bg-white dark:bg-slate-950 space-y-8 overflow-hidden">
+        {/* Background shape */}
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 -skew-y-8 bg-gradient-to-br from-indigo-400 via-purple-500 to-pink-500 opacity-20 dark:opacity-20 pointer-events-none"
+        ></div>
+
+        <h2 className="relative text-3xl font-bold text-center text-gray-900 dark:text-gray-100 z-10">
+          The Deeb Dive
         </h2>
+
+        <div className="relative flex justify-center z-10">
+          <ul className="text-gray-600 dark:text-gray-300 space-y-3 text-left max-w-md">
+            <li>🧰 New tools, libraries, and frameworks</li>
+            <li>🚀 Tips from real solo builders</li>
+            <li>📦 Deep dives into projects that inspire</li>
+            <li>🧪 Experiments worth trying this weekend</li>
+          </ul>
+        </div>
+
+        <div className="relative px-6 md:px-48 pt-6 z-10">
+          <EmailSignupForm
+            // callout={
+            //   <div className="text-lg w-full text-gray-700 dark:text-gray-300 max-w-lg">
+            //     <Callout type="info">
+            //       A weekly email for indie devs building personal, weird, and wonderful projects.
+            //     </Callout>
+            //   </div>
+            // }
+          />
+        </div>
+      </section>
+
+      {/* Core Features Section */}
+      <section className="py-20 px-6 text-center bg-slate-500 dark:bg-slate-900">
+        <h2 className="text-3xl font-bold mb-10 text-slate-200">Why Developers Love deeb</h2>
         <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3 text-slate-300">
           <div className="rounded-md bg-slate-600 dark:bg-base-200 p-4 shadow">
             <h3 className="font-bold">🦀 Rust-native</h3>
@@ -96,10 +136,7 @@ export default function HomePage() {
       </section>
 
       {/* Use Case Examples */}
-      <section
-        id="get-started"
-        className="py-16 px-6 bg-slate-500 dark:bg-slate-900 text-slate-300"
-      >
+      <section id="get-started" className="py-16 px-6 dark:bg-slate-950">
         <h2 className="text-3xl font-bold text-center mb-6">How to Use deeb</h2>
         <div className="flex flex-wrap md:flex-nowrap gap-4">
           <div className="rounded-md bg-slate-700 p-4 shadow w-full md:w-1/2">
@@ -122,8 +159,8 @@ export default function HomePage() {
       </section>
 
       {/* Comparison Grid */}
-      <section className="py-20 px-6 text-center">
-        <h2 className="text-slate-500 dark:text-slate-200 text-3xl font-bold mb-10">
+      <section className="py-20 px-6 text-center bg-slate-500 dark:bg-slate-900">
+        <h2 className="text-slate-200 dark:text-slate-200 text-3xl font-bold mb-10">
           How deeb compares
         </h2>
         <div className="overflow-x-auto rounded-lg shadow ring-1 ring-gray-200 dark:ring-gray-700">
@@ -181,7 +218,7 @@ export default function HomePage() {
       </section>
 
       {/* CTA Footer */}
-      <footer className="py-10 text-center bg-slate-500 dark:bg-slate-900 text-slate-200 px-4">
+      <footer className="py-10 text-center dark:bg-slate-950 px-4">
         <h3 className="text-xl font-bold mb-2">Show some love!</h3>
         <p className="mb-6">Start embedding lightweight databases into your Rust apps today.</p>
         <StarButton />
