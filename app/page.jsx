@@ -1,6 +1,5 @@
 import Image from "next/image";
 import { StarButton, CodeBlock, Button, EmailSignupForm } from "./components";
-import { Callout } from "nextra/components";
 
 export default function HomePage() {
   return (

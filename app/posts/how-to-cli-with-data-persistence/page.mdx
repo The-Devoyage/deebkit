@@ -1,0 +1,147 @@
+---
+title: How to Build a Rust CLI with Built-In Data Persistence
+date: 2025-08-08
+tags: ['Rust CLI', 'Deeb', 'Database', 'CLI Starter']
+description: A thoroguh starter repo to get your next CLI (with local database) up and going quick.
+author: Nick McLean
+image: /blog/how-to-build-cli.png
+---
+
+import { StarButton } from '../../components';
+import { EmailSignupForm } from '../../components'
+
+# Build a Rust CLI with Built-In Data Persistence
+
+If you’ve ever built a CLI tool in Rust, you know the usual setup: parse commands with Clap, write logic for each subcommand, and then figure out how to store data—maybe with SQLite, maybe with JSON files.  
+
+**The Deeb CLI Starter** streamlines that process by giving you a ready-to-use CLI template with **data persistence baked in** from the start.
+
+## Why This Starter Exists
+
+When starting a CLI project, wiring up data storage often feels like unnecessary busywork—especially for quick tools or prototypes.  
+This starter repo handles that for you by pairing:
+
+- **Clap** → for intuitive command parsing
+- **Deeb** → for lightweight, fast, and developer-friendly data persistence
+
+With it, you can focus on your commands and business logic, not on boilerplate setup.
+
+---
+
+## Getting Started
+
+1. Clone the repo:
+
+```bash
+git clone https://github.com/The-Devoyage/deeb-cli-starter.git
+cd deeb-cli-starter
+```
+
+2. Copy the example environment file:
+
+```bash
+cp example.env .env
+```
+
+3. Install dependencies and run the CLI:
+
+```bash
+cargo run
+```
+
+4. You should see the starter help screen:
+
+```
+My awesome CLI with easy data persistence
+
+Usage: deeb-cli-starter <COMMAND>
+
+Commands:
+  todo  Manage Todos
+  help  Print this message or the help of the given subcommand(s)
+
+Options:
+  -h, --help  Print help
+```
+
+---
+
+## Features Out of the Box
+
+1. **Modular Command System**  
+   Easily extend or modify commands in the `cli` module. Clap handles parsing so you can focus on functionality.
+
+```rust
+#[derive(Subcommand)]
+pub enum RootCommands {
+    /// Manage Todos
+    #[command(subcommand)]
+    Todo(TodoCommands),
+    // Add more commands here...
+}
+```
+
+2. **Built-In Persistence**  
+   Define a struct in the `models` module and store it instantly using Deeb’s `insert_one` or retrieve with `find_many`.
+
+```rust
+#[derive(Serialize, Deserialize, Collection)]
+pub struct Todo {
+    name: String,
+    task: String,
+}
+
+impl Todo {
+    pub async fn new(db: &Deeb, name: String, task: String) -> CliResult<Self> {
+        let todo = Todo::insert_one(db, Todo { name, task }, None)
+            .await
+            .map_err(|_e| TodoError::InsertFailed)?;
+
+        Ok(todo)
+    }
+
+    ...
+}
+```
+
+> <StarButton /> 
+> Like Deeb? Star the repo to support the direction Deeb is going - or - Check out the [Docs](/docs)!
+
+3. **Environment-First Configuration**  
+   Environment variables are validated before runtime to avoid misconfiguration issues.
+
+4. **Logging Included**  
+   The `log` crate is set up and ready for use, so you can start logging debug and info messages immediately.
+
+---
+
+## Example Command: Todos
+
+This starter includes a simple `todo` command for managing a persistent list of tasks.
+
+```bash
+# Add a todo
+cargo run -- todo add "Write blog post"
+
+# List todos
+cargo run -- todo list
+```
+
+The data is automatically persisted by Deeb—no database setup required.
+
+---
+
+## Perfect For
+
+- Rapid CLI prototyping
+- Internal tooling
+- Learning Rust with real-world persistence
+- Any small-to-medium CLI project that needs storage
+
+---
+
+**Repo Link:** [Deeb CLI Starter](https://github.com/The-Devoyage/deeb-cli-starter)
+
+---
+
+<EmailSignupForm />
