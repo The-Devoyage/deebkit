@@ -1,5 +1,6 @@
 const meta = {
   index: "Posts",
+  ["deeb-dive-2"]: "Deeb Dive - Issue 2",
   ["how-to-cli-with-data-persistence"]: "How to Build a Rust CLI with Built-In Data Persistence",
   ["deeb-dive-1"]: "Deeb Dive - Issue 1",
   // ["how-to-build-acid"]: "How to build an ACID Compliant Database",

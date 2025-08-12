@@ -1,0 +1,81 @@
+---
+title: Deeb Dive - Issue 2
+date: 2025-08-12
+tags: ['Deeb Dive', 'wrkflw CLI', 'GitHub Actions', 'indie dev tools', 'developer productivity']
+author: Nick McLean
+description: In this Deeb Dive - explore the wrkflw CLI, boost automation with GitHub Actions, and discover indie dev tools to build slick CLIs. 
+image: /blog/deeb-dive.png
+---
+
+import { Callout } from "nextra/components"
+import { EmailSignupForm } from '../../components'
+import { StarButton } from '../../components';
+
+# Deeb Dive – Issue #2  
+
+*Quick picks for indie devs highlighting tools that make you smile.*
+
+👋 *Hello All!* Thanks for joining in for round two of Deeb Dive.   
+
+This is your weekly dispatch exploring personal dev projects, indie tools, weird libraries, and the creative chaos behind building something just for yourself — or your dream that might scale to millions.
+
+Let’s dive in. 🌊
+
+![Deeb Dive Logo](/blog/deeb-dive.png)
+
+---
+
+<EmailSignupForm callout={{text: "Never miss a Deeb Dive - Every Tuesday at 10!", type: "info"}} />
+
+## Tool of the Week: Wrkflw
+
+> 🔗 https://github.com/bahdotsh/wrkflw
+
+wrkflw is a terminal-based tool for validating and running GitHub Actions workflows locally. It gives you an interactive TUI for exploring, testing, and debugging workflows without having to push changes to GitHub.
+
+![Wrkflw Example](/blog/wrkflw-demo.gif)
+
+### What You Can Use It For
+
+- Quickly validate workflow syntax and catch errors before pushing.
+- Run workflows locally using Docker, Podman, or native emulation.
+- Debug failed jobs with preserved containers.
+- Test workflow changes in a sandbox environment.
+
+## Package Spotlight  – **VelvetIO**
+
+> 🔗 https://github.com/hunter-arton/velvetio
+
+VelvetIO is a sleeker, smarter Rust crate for crafting CLI tools—eliminating the slog of `stdin().read_line()` and manual parsing. It offers type-safe input, built-in validation, user-friendly errors, and even form-builder support—all with zero dependencies for lean builds.
+
+### 🛠 What You Can Build With It
+
+- Interactive data-collection wizards — prompt users for names, numbers, confirmations, and parse everything into the correct data types effortlessly.
+- Complex multi-field forms — group multiple related inputs (like username, password, email) using its form-builder feature to streamline your flow.
+- Input-validated CLI tools — with smart validators and clear error messages, you can ensure users give the right kind of data (e.g. a positive integer or valid boolean).
+- Lean, fast utilities — because VelvetIO is dependency-free, your binary stays compact and compiles quickly—perfect for distribution or embedded environments.
+
+## Dive Deeper
+
+> 🔗 [Kick start your next CLI with this starter repo using Clap and Deeb](/posts/how-to-cli-with-data-persistence)
+
+Want to whip up a Rust CLI that remembers stuff without wrestling databases? This “Deeb CLI Starter” kit pairs Clap for easy commands with Deeb for instant data persistence—so you can skip the setup drama and get straight to bossing your CLI around.
+
+![CLI Starter Blog Thumbnail](/blog/how-to-build-cli.png)
+
+---
+> <StarButton /> 
+> Like Deeb? Star the repo to support the direction Deeb is going - or - Check out the [Docs](/docs)!
+
+## On your way out
+
+If you liked this issue, forward it to a friend who’s hacking on their own stack.
+
+And if you’re building something weird or wonderful — [submit it here](mailto:nickmclean@thedevoyage.com) to get featured.
+
+Thanks for diving deep,  
+— Nick
+
+---
+
+<EmailSignupForm />

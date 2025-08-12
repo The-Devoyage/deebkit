@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Callout } from "nextra/components";
 
 export function EmailSignupForm({ callout }) {
   const [email, setEmail] = useState("");
@@ -33,7 +34,7 @@ export function EmailSignupForm({ callout }) {
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
           ✉ One email a week. Infinite side project fuel.
         </h1>
-        {callout}
+        {callout && <Callout type={callout.type}>{callout.text}</Callout>}
         <div className="flex flex-col md:flex-row gap-2">
           <input
             type="email"
