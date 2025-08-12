@@ -17,7 +17,7 @@ export default async function PostsPage() {
   }
 
   return (
-    <div className="flex flex-col mx-auto max-w-4xl mt-4 space-y-4">
+    <div className="flex flex-col mx-auto max-w-4xl mt-4 space-y-4 p-4">
       {/* Email Signup */}
       <EmailSignupForm />
 

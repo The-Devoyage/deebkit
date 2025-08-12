@@ -53,7 +53,7 @@ export function PostCard({ post, isNew }) {
               <Link
                 key={tag}
                 href={`/tags/${tag}`}
-                className="inline-block bg-gray-100 dark:bg-neutral-800 px-2 py-0.5 text-xs rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-700"
+                className="inline-block bg-gray-100 dark:bg-neutral-800 px-2 py-0.5 text-xs rounded-md text-gray-700 dark:text-gray-300 dark:hover:bg-gray-700 hover:bg-gray-200"
               >
                 {tag}
               </Link>
