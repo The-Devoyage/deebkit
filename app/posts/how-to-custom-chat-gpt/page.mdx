@@ -1,0 +1,259 @@
+---
+title: How to Build Your Own ChatGPT with Tauri and Deeb
+date: 2025-08-14
+tags: ['Rust', 'Tauri', 'AI', 'Deeb', 'OpenAI', 'Chatbot']
+description: Learn how to create your own lightweight, local-first ChatGPT desktop app using Tauri for the frontend and Deeb for embedded data persistence.
+author: Nick McLean
+image: /blog/how-to-build-chat-gpt-with-tauri.png
+---
+
+import { StarButton } from '../../components';
+import { EmailSignupForm } from '../../components'
+
+# Build Your Own ChatGPT with Tauri and Deeb  
+
+Deebkit is all about helping the at-home coder create their own solutions. It’s fun, practical, and a great way to deepen your knowledge on topics you actually care about.  
+
+In this guide, we’ll build a **custom ChatGPT desktop app** using [Tauri](https://tauri.app/) for the UI and [Deeb](https://deebkit.com) for **embedded JSON-based persistence**.  
+
+---
+
+## Why Build Your Own?  
+
+- Stop overpaying for cloud services when you can control your own app  
+- Get a basic chatbot running in under an evening  
+- Customize it to handle *your* unique workflows  
+- Store conversation history locally with full ownership of your data  
+- Learn real, transferable skills in Rust + desktop app dev  
+
+![Chattd Blog Thumbnail](/blog/how-to-build-chat-gpt-with-tauri.png)
+
+---
+
+## Step 1 – Create Your Tauri Project  
+
+Tauri makes it easy to spin up a new desktop app.  
+
+```bash
+cargo install create-tauri-app --locked
+cargo create-tauri-app
+```
+
+I recommend choosing **React + TypeScript** (comes with Vite) for a smooth frontend developer experience.  
+
+📄 **Docs:** [Getting Started with Tauri](https://tauri.app/start/create-project/)  
+
+---
+
+## Step 2 – Add a UI Framework  
+
+I used TailwindCSS + DaisyUI for quick styling! You can choose your UI implementation of preference!
+
+- [DaisyUI](https://daisyui.com/) – Prebuilt Tailwind components  
+- [TailwindCSS Vite Setup](https://v3.tailwindcss.com/docs/guides/vite)  
+
+---
+
+## Step 3 – Install Deeb for Local Data Persistence  
+
+Now let's get to the fun stuff. We will need to store chat messages so we can see previous conversations!
+
+Deeb gives us MongoDB-style persistence but stored locally in JSON files. It's a NoSQL no-fuss way that we can persist data with minimal setup in a Rust Application. It's embedded nature is perfect for this app - keeping all our chat logs local and readable.
+
+```bash
+cargo add deeb
+cargo add serde --features derive
+```
+
+### Define a Message Model
+
+Deeb is unstructured - but - we can use Rust to keep our types in check for a safe application!
+
+```rs
+// The Collection trait adds helper methods like `find_many` and `insert_one`
+#[derive(Serialize, Deserialize, Collection)]
+pub struct Message {
+    _id: String, # Deeb creates this for us!
+    _created_at: String, # Deeb creates this for us too!
+    text: String,
+    role: MessageRole,
+}
+```
+
+---
+
+## Step 4 – Create App State with a Deeb Instance  
+
+Just like any other backend application, we will want to share the database instead of having to re-create it every time.
+
+Tauri gives us a quick and easy way to create shared app sate that can hold and make our database reusable.
+
+```rs
+use deeb::Deeb;
+
+use crate::{message::Message, ChattdError, ChattdRresult};
+
+pub struct AppState {
+    pub db: Deeb,
+}
+
+impl AppState {
+    pub async fn new() -> ChattdRresult<Self> {
+        // Create a new deeb instance and store it inside the shareable app state.
+        let db = Deeb::new();
+        db.add_instance("chattd", "./chattd.json", vec![Message::entity()])
+            .await
+            .map_err(|_| ChattdError::DatabaseError("Failed to add instance.".into()))?;
+        Ok(AppState { db })
+    }
+}
+```
+
+- (Tauri App State)[https://v2.tauri.app/develop/state-management]
+
+---
+
+## Step 5 – Create Tauri Commands for Messages + AI Calls  
+
+Here’s a save command example that also calls the OpenAI API and persists the bot’s response!
+
+> Note: You'll have to fill in some blanks here with some of the type definitions! See the source code at the end of this article for a full example!
+
+```rs
+#[tauri::command]
+pub async fn save_message(
+    app_handle: tauri::AppHandle,
+    app_state: State<'_, AppState>,
+    message: CreateMessageInput,
+) -> tauri::Result<Message> {
+    // Persist the data
+    let saved_msg =
+        Message::insert_one::<CreateMessageInput>(&app_state.db, message.clone(), None).await?;
+
+    // Tell the frontend
+    app_handle.emit("message_created", &saved_msg).unwrap();
+
+    // Call OpenAI API
+    let client = reqwest::Client::new();
+    let req_body = ChatGptRequest {
+        model: "gpt-3.5-turbo".into(), // Or a newer model!
+        messages: vec![ChatGptMessage {
+            role: "user".into(),
+            content: message.text.clone(),
+        }],
+    };
+
+    let resp = client
+        .post("https://api.openai.com/v1/chat/completions")
+        .bearer_auth(std::env::var("OPENAI_API_KEY").expect("OPENAI_API_KEY not set"))
+        .json(&req_body)
+        .send()
+        .await
+        .map_err(|_| anyhow!("Failed to post to OpenAI."))?;
+
+    let parsed: ChatGptResponse = resp
+        .json()
+        .await
+        .map_err(|_| anyhow!("Failed to parse JSON."))?;
+
+    let bot_text = parsed
+        .choices
+        .get(0)
+        .map(|c| c.message.content.clone())
+        .unwrap_or_else(|| "No response".into());
+
+    let bot_msg = CreateMessageInput {
+        text: bot_text,
+        role: MessageRole::Bot,
+    };
+
+    // Save the bot message for later
+    let saved_bot_msg =
+        Message::insert_one::<CreateMessageInput>(&app_state.db, bot_msg, None).await?;
+
+    // Share AI response with the frontend
+    app_handle.emit("message_created", &saved_bot_msg).unwrap();
+
+    Ok(saved_msg)
+}
+```
+
+---
+
+## Step 6 – Hook It Up in `main.rs`  
+
+```rs
+// main.rs 
+
+#[cfg_attr(mobile, tauri::mobile_entry_point)]
+pub async fn run() -> ChattdRresult<()> {
+    let app_state = AppState::new().await?;
+
+    tauri::Builder::default()
+        .plugin(tauri_plugin_http::init())
+        .plugin(tauri_plugin_opener::init())
+        .invoke_handler(tauri::generate_handler![save_message, read_messages])
+        .setup(|app| {
+            app.manage(app_state);
+            Ok(())
+        })
+        .run(tauri::generate_context!())
+        .expect("error while running tauri application");
+
+    Ok(())
+}
+```
+
+---
+
+## Step 7 – Frontend Integration  
+
+```ts
+// Send a message
+const handleSendMessage = async (incoming: Omit<Message, "_id">) => {
+  try {
+    await invoke("save_message", { message: incoming });
+  } catch (err) {
+    console.error(err);
+  }
+};
+```
+
+```ts
+// Listen for messages
+useEffect(() => {
+  const unlistenPromise = listen<Message>("message_created", (event) => {
+    setMessages((prev) => [...prev, event.payload]);
+  });
+
+  return () => {
+    unlistenPromise.then((unlisten) => unlisten());
+  };
+}, []);
+
+```
+
+---
+
+## Step 8 – Build Your UI & Enjoy Your Own ChatGPT  
+
+At this point, you can customize your UI however you want—modern chat bubbles, markdown rendering, token streaming, whatever your heart desires. 
+
+![Chattd Screenshot](/blog/chattd-screenshot.png)  
+
+---
+
+## Final Thoughts  
+
+With **Tauri** for cross-platform desktop apps and **Deeb** for lightweight embedded persistence, you can spin up a fully functional AI chatbot that’s yours to control and expand.  
+
+It’s a fun weekend project that can grow into something much bigger.  
+
+Check out the [Chattd Repo](https://www.github.com/the-devoyage/chattd) to see the full source code and star Deeb on your way out!
+
+> <StarButton />  
+> Like Deeb? Star the repo to support its direction – or – Check out the [Docs](/docs)!  
+
+---
+
+<EmailSignupForm />
