@@ -1,5 +1,6 @@
 const meta = {
   index: "Posts",
+  ["deeb-dive-3"]: "Deeb Dive - Issue 3",
   ["how-to-custom-chat-gpt"]: "HT: Build your own ChatGPT with Tauri and Deeb",
   ["deeb-dive-2"]: "Deeb Dive - Issue 2",
   ["how-to-cli-with-data-persistence"]: "How to Build a Rust CLI with Built-In Data Persistence",

@@ -1,0 +1,82 @@
+---
+title: Deeb Dive - Issue 3
+date: 2025-08-18
+tags: ['indie-dev', 'developer-tools', 'react', 'tauri', 'open-source']
+author: Nick McLean
+description: A weekly roundup for indie devs featuring tools, libraries, and projects worth staying up late for. 
+image: /blog/deeb-dive.png
+---
+
+import { Callout } from "nextra/components"
+import { EmailSignupForm } from '../../components'
+import { StarButton } from '../../components';
+
+# Deeb Dive – Issue #3
+
+*Quick picks for indie devs highlighting tools that make you want to stay up late building.*
+
+👋 *Hello Friends!* Thanks for joining in for round three of Deeb Dive.   
+
+This is your weekly dispatch exploring personal dev projects, indie tools, weird libraries, and the creative chaos behind building something just for yourself — or your dream that might scale to millions.
+
+Let’s dive in. 🌊
+
+![Deeb Dive Logo](/blog/deeb-dive.png)
+
+---
+
+<EmailSignupForm callout={{text: "Never miss a Deeb Dive - Every Tuesday at 10!", type: "info"}} />
+
+## Tool of the Week: **Doxxer**
+
+> 🔗 https://github.com/karlis-vagalis/doxxer
+
+The tool, `doxxer`, is a slick, command-line utility that automates Semantic Versioning (SemVer) directly from your Git tags. It's like having a personal versioning assistant that understands your commit history, so you can focus on building awesome features instead of manually bumping version numbers.
+
+### What You Can Build With It
+
+- **CI/CD Pipelines**: Automatically generate a unique, correct version number for every build, so you can easily track which commit corresponds to which release in production.  
+- **Open-Source Projects**: Keep your public releases clean and consistent by generating version tags based on your commit history. No more manual `v1.2.3` tags!  
+- **Package Management**: When publishing packages to registries like npm or crates.io, use doxxer to ensure every new version is a valid SemVer, preventing errors and confusion for your users.  
+- **Documentation Generation**: Include the automatically generated version number in your project's documentation, giving users a clear view of the software version they are referencing.  
+- **Dynamic Development Builds**: Create a pre-release version for every commit to a development branch, like `0.0.0-dev.19+1b9f41e`, making it easy to see how many commits are ahead of the last stable release.  
+
+## Package Spotlight: **light-hooks**
+
+> 🔗 https://www.npmjs.com/package/light-hooks
+
+The library, `light-hooks`, is a lightweight, high-performance set of React hooks that provides essential functionality without the extra baggage. It’s built with modern browser APIs and TypeScript for a faster, more reliable developer experience. Think of it as a toolkit of highly optimized, single-purpose tools for common development challenges.
+
+### What You Can Use It For
+
+- **Build a Weather App**: Use `useGeolocation` to automatically detect a user's location and display local weather information.  
+- **Create a Blog with Dark Mode**: Combine `useLocalStorage` to save a user's dark mode preference with `useIsMobile` to serve an optimized layout for phones.  
+- **Make an E-commerce Site**: Implement `useDebounce` on your search bar to only fetch results once the user stops typing, saving on expensive API calls.  
+- **Design an Interactive Game**: Use `useCountdown` to add a timer to a quiz or game with a time limit.  
+- **Add "Click Outside" Functionality**: Use `useClickOutside` to close a dropdown menu or a modal pop-up when a user clicks anywhere else on the screen.  
+- **Build a PWA**: Leverage `useFetch` for smart data fetching with built-in caching to make your Progressive Web App (PWA) feel incredibly fast, even on a flaky network connection.  
+
+## Dive Deeper
+
+> 🔗 [Kick Start your own custom Chat GPT](/posts/how-to-custom-chat-gpt)
+
+Building your own Chat GPT client can save you money and allow you to implement custom features that go beyond the typical AI interface. Check out this starter repo to jump start your next project with Tauri and Deeb!
+
+![Chattd Thumbnail](/blog/chattd-screenshot.png)
+
+---
+> <StarButton />  
+> Like Deeb? Star the repo to support the direction Deeb is going — or — Check out the [Docs](/docs)!
+
+## On Your Way Out
+
+If you liked this issue, forward it to a friend who’s hacking on their own stack.  
+
+And if you’re building something weird or wonderful — [submit it here](mailto:nickmclean@thedevoyage.com) to get featured.  
+
+Thanks for diving deep,  
+— Nick
+
+---
+
+<EmailSignupForm />
